@@ -34,6 +34,7 @@ jobs:
           npx cap add android
           sed -i 's#<uses-permission android:name="android.permission.INTERNET" />#<uses-permission android:name="android.permission.INTERNET" />\n    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n    <uses-permission android:name="android.permission.CAMERA" />\n    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />#' android/app/src/main/AndroidManifest.xml
           grep -c POST_NOTIFICATIONS android/app/src/main/AndroidManifest.xml
+          npx capacitor-assets generate --android --iconBackgroundColor '#101317' --iconBackgroundColorDark '#101317' --splashBackgroundColor '#0E1114' --splashBackgroundColorDark '#0E1114'
           npx cap sync android
       - name: APK derle
         working-directory: android
@@ -49,7 +50,7 @@ jobs:
 
   ios:
     name: iOS IPA (imzasız)
-    runs-on: macos-latest
+    runs-on: macos-15-intel
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -70,6 +71,7 @@ jobs:
           /usr/libexec/PlistBuddy -c "Add :NSCameraUsageDescription string 'Araç, belge ve gösterge fotoğrafı çekmek için kamera kullanılır.'" $PL
           /usr/libexec/PlistBuddy -c "Add :NSPhotoLibraryUsageDescription string 'Araç ve belge fotoğrafı seçmek için galeri kullanılır.'" $PL
           /usr/libexec/PlistBuddy -c "Add :NSPhotoLibraryAddUsageDescription string 'Çekilen fotoğrafları kaydetmek için.'" $PL
+          npx capacitor-assets generate --ios --iconBackgroundColor '#101317' --splashBackgroundColor '#0E1114' --splashBackgroundColorDark '#0E1114'
           npx cap sync ios
       - name: Derle (imzasız)
         run: |

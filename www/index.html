@@ -306,8 +306,8 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:.01em;margi
     </div>
     <form class="form" id="vform" novalidate>
       <div class="field" id="nameField">
-        <label class="label" for="fName">Araç sahibi · Ad Soyad</label>
-        <input id="fName" autocomplete="name" placeholder="Örn. Burak Yılmaz" maxlength="40">
+        <label class="label" for="fName">Araç sahibi · Adın</label>
+        <input id="fName" autocomplete="name" placeholder="Örn. Burak" maxlength="40">
       </div>
       <div class="field">
         <span class="label">Araç tipi</span>
@@ -818,7 +818,7 @@ $("#vform").addEventListener("submit",e=>{
   if(brand===OTHER)brand=$("#fBrandTxt").value.trim();
   if(brand&&(model===OTHER||$("#fBrand").value===OTHER))model=$("#fModelTxt").value.trim();
   const miss=[];
-  if(!addMode&&name.split(/\s+/).length<2)miss.push("ad ve soyad");
+  if(!addMode&&!name)miss.push("adın");
   if(plate.replace(/\s/g,"").length<5)miss.push("plaka");
   if(!brand)miss.push("marka");if(!model)miss.push("model");if(!year)miss.push("araç yaşı");
   if(miss.length){$("#fErr").textContent="Eksik: "+miss.join(", ")+".";return}
@@ -899,7 +899,7 @@ function renderHome(){
 $("#editOwner").onclick=settingsSheet;
 function settingsSheet(){
   openSheet(`<h3>Ayarlar</h3>
-    <div class="field"><label class="label" for="oName">Araç sahibi · Ad Soyad</label><input id="oName" value="${esc(S.owner?.name)}" maxlength="40"></div>
+    <div class="field"><label class="label" for="oName">Araç sahibi · Adın</label><input id="oName" value="${esc(S.owner?.name)}" maxlength="40"></div>
     <label class="toggle"><input type="checkbox" id="oNotif" ${S.settings.notif?"checked":""}><span><b>Bakım ve tarih hatırlatmaları</b><small>Bakıma 30 gün kala ve bakım günü; muayene, sigorta, kasko ve MTV için 15 gün ve 1 gün kala bildirim.</small></span></label>
     <label class="toggle"><input type="checkbox" id="oKm" ${S.settings.kmMonthly?"checked":""}><span><b>Aylık km hatırlatması</b><small>Her ayın 1'inde kilometreni güncellemeni hatırlatır.</small></span></label>
     ${NATIVE?"":`<div class="hint">Bildirimler telefona kurulu uygulamada çalışır.</div>`}
