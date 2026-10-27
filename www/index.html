@@ -627,7 +627,7 @@ async function backup(){
   try{
     const photos={};
     for(const r of allPhotoRefs()){if(r.startsWith("file:")){const b=await photoB64(r);if(b)photos[r]=b}}
-    const out=JSON.stringify({app:"bakim-defterim",v:2,created:new Date().toISOString(),data:S,photos});
+    const out=JSON.stringify({app:"bakim-defterim",v:2,created:new Date().toISOString(),data:Object.assign({},S,{settings:Object.assign({},S.settings,{geminiKey:undefined})}),photos});
     done();
     await shareFile(`BakimDefterim-yedek-${today()}.json`,u8b64(new TextEncoder().encode(out)),"application/json","Bakım Defterim yedeği");
   }catch(e){done();toast("Yedek alınamadı. Tekrar dene.")}
@@ -649,7 +649,7 @@ $("#fileIn").addEventListener("change",e=>{
         for(const [ref,b64] of Object.entries(j.photos||{})){try{map[ref]=await storePhoto("data:image/jpeg;base64,"+b64)}catch(err){}}
         const fix=r=>r&&r.startsWith("file:")?(map[r]||null):r;
         j.data.vehicles.forEach(v=>{v.photo=fix(v.photo);(v.docs||[]).forEach(d=>d.photos=(d.photos||[]).map(fix).filter(Boolean));(v.records||[]).forEach(r=>{if(r.photos)r.photos=r.photos.map(fix).filter(Boolean)})});
-        S=j.data;defaults();await persist();scheduleAll();
+        const oldKey=S.settings&&S.settings.geminiKey;S=j.data;defaults();if(oldKey)S.settings.geminiKey=oldKey;await persist();scheduleAll();
         done();closeSheet();
         if(S.owner&&S.vehicles.length){renderHome();show("home")}else openOnb(!!S.owner);
         toast("Yedek yüklendi");
@@ -777,7 +777,7 @@ function fillSelects(){
     `<optgroup label="Tüm markalar (A–Z)">${all.map(k=>`<option>${esc(k)}</option>`).join("")}</optgroup>`+
     `<option value="${OTHER}">Listede yok, kendim yazacağım</option>`;
   const nModels=all.reduce((s,k)=>s+C[k].length,0);
-  $("#brandCount").textContent=`${all.length} marka, ${nModels.toLocaleString("tr-TR")} model.${FTYPE==="moto"?"":" Teknik bilgiler internetten otomatik getirilir."}`;
+  $("#brandCount").textContent=`${all.length} marka, ${nModels.toLocaleString("tr-TR")} model. Teknik bilgiler internetten otomatik getirilir.`;
   const m=$("#fModel");m.disabled=true;m.hidden=false;m.innerHTML='<option value="">Önce marka</option>';$("#fBrandTxt").hidden=true;$("#fModelTxt").hidden=true;
   const y=$("#fYear");let o='<option value="">Seç</option>';
   for(let yr=CUR_YEAR;yr>=CUR_YEAR-35;yr--){const age=CUR_YEAR-yr;o+=`<option value="${yr}">${age===0?"Sıfır km":age+" yaşında"} · ${yr} model</option>`}
@@ -903,6 +903,9 @@ function settingsSheet(){
     <label class="toggle"><input type="checkbox" id="oNotif" ${S.settings.notif?"checked":""}><span><b>Bakım ve tarih hatırlatmaları</b><small>Bakıma 30 gün kala ve bakım günü; muayene, sigorta, kasko ve MTV için 15 gün ve 1 gün kala bildirim.</small></span></label>
     <label class="toggle"><input type="checkbox" id="oKm" ${S.settings.kmMonthly?"checked":""}><span><b>Aylık km hatırlatması</b><small>Her ayın 1'inde kilometreni güncellemeni hatırlatır.</small></span></label>
     ${NATIVE?"":`<div class="hint">Bildirimler telefona kurulu uygulamada çalışır.</div>`}
+    <div class="field"><div class="label-row"><label class="label" for="oKey">Gemini API anahtarı</label><button type="button" class="link-btn" id="oKeyTest">Anahtarı dene</button></div>
+      <input id="oKey" value="${esc(S.settings.geminiKey||"")}" placeholder="AIza…" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <div class="hint" id="oKeyHint">Fabrika verilerini internetten getirmek için gerekir. Ücretsiz anahtarı <a href="${GEMINI_KEY_URL}">aistudio.google.com/apikey</a> adresinden "Create API key" ile al ve buraya yapıştır. Anahtar sadece bu telefonda saklanır, yedeğe eklenmez.</div></div>
     <button class="btn btn-primary" id="oSave">Kaydet</button>
     <div class="section"><div class="section-h"><h3>Yedekleme</h3></div>
       <div class="hint">Kayıtların sadece bu telefonda duruyor. Telefon değiştirmeden önce yedek al ve yedeği WhatsApp, Drive veya mail ile kendine gönder. Yeni telefonda "Yedekten yükle" ile geri getir.</div>
@@ -912,11 +915,13 @@ function settingsSheet(){
     const n=$("#oName").value.trim();if(n)S.owner={name:n};
     const wasOff=!S.settings.notif&&!S.settings.kmMonthly;
     S.settings.notif=$("#oNotif").checked;S.settings.kmMonthly=$("#oKm").checked;
-    save();closeSheet();renderHome();
+    const nk=$("#oKey").value.trim();if(nk!==(S.settings.geminiKey||"")){S.settings.geminiKey=nk;S.vehicles.forEach(x=>{if(!x.variants){x.specTried=false;x.specError=null}})}
+    save();closeSheet();renderHome();if(!$("#detail").hidden)renderDetail();
     if(NATIVE&&wasOff&&(S.settings.notif||S.settings.kmMonthly)&&!(await ensureNotifPerm()))toast("Bildirim izni kapalı. Telefon ayarlarından Bakım Defterim'e bildirim izni ver.");
     else toast("Ayarlar kaydedildi");
   };
   $("#oBackup").onclick=backup;
+  $("#oKeyTest").onclick=async()=>{const k=$("#oKey").value.trim(),h=$("#oKeyHint");if(!k){h.textContent="Önce anahtarı yapıştır.";return}h.textContent="Deneniyor…";const e=await testGeminiKey(k);h.textContent=e||"Anahtar çalışıyor. Kaydet'e bas.";h.style.color=e?"var(--bad)":"var(--ok)"};
   $("#oRestore").onclick=()=>$("#fileIn").click();
 }
 
@@ -1006,7 +1011,7 @@ function tabGenel(v){
         ${sp(moto?"Lastik (ön / arka)":"Lastik ölçüsü",esc(v.tire))}${sp("Akü",esc(v.battery))}
         ${sp("Toplam bakım",recs.length?recs.length+" kayıt":"")}${sp("Toplam masraf",total?fmtTL(Math.round(total)):"")}
       </div></div>
-    ${moto?"":`<div class="section" id="specSec">${specsHTML(v)}</div>`}
+    <div class="section" id="specSec">${specsHTML(v)}</div>
     <div class="section"><button class="btn btn-danger" id="delVeh">Bu aracı sil</button></div>`;
   $("#photoBtn").onclick=()=>changePhoto(v);
   $("#kmBtn").onclick=()=>kmSheet(v);
@@ -1014,7 +1019,7 @@ function tabGenel(v){
   $("#editTech").onclick=techSheet;
   document.querySelectorAll("[data-part]").forEach(b=>b.onclick=()=>partSheet(v,b.dataset.part));
   wireSpecs(v);
-  if(!moto&&!v.variants&&!v.specTried&&!specJob)fetchSpecs(v,false);
+  if(S.settings.geminiKey&&!v.variants&&!v.specTried&&!specJob)fetchSpecs(v,false);
   armButton($("#delVeh"),"Emin misin? Araç ve tüm kayıtları silinecek",()=>{
     const refs=[v.photo,...(v.docs||[]).flatMap(d=>d.photos||[]),...(v.records||[]).flatMap(r=>r.photos||[])];
     S.vehicles=S.vehicles.filter(x=>x.id!==v.id);save();refs.forEach(dropPhoto);goHome();toast("Araç silindi")});
@@ -1331,111 +1336,128 @@ async function servicePdf(v){
   }catch(e){done();toast("PDF oluşturulamadı. Tekrar dene.")}
 }
 
-/* --- Auto technical data from the internet (CarQuery open vehicle database) --- */
+/* --- Factory data from the internet: Gemini with Google Search, on the user's own API key --- */
 const SPEC_FIELDS=[
-  ["motor_hacmi_cc","Motor hacmi",x=>x+" cc"],["guc_hp","Güç",x=>x+" PS"],["tork_nm","Tork",x=>x+" Nm"],
-  ["silindir","Silindir"],["yakit","Yakıt"],["vites","Şanzıman"],["ceker","Çekiş"],["kasa","Kasa tipi"],
-  ["yakit_deposu_l","Yakıt deposu",x=>x+" L"],["ortalama_tuketim","Ortalama tüketim",x=>x+" L/100 km"],
-  ["maks_hiz","Maksimum hız",x=>x+" km/s"],["hizlanma","0-100 km/s",x=>x+" sn"],["agirlik","Ağırlık",x=>x+" kg"]
+  ["motor_hacmi_cc","Motor hacmi",x=>x+" cc"],["guc_hp","Güç",x=>x+" HP"],["tork_nm","Tork",x=>x+" Nm"],
+  ["yakit","Yakıt"],["vites","Şanzıman"],["ceker","Çekiş"],["sogutma","Soğutma"],["son_aktarma","Son aktarma"],
+  ["triger","Triger tipi"],["triger_degisim_km","Triger değişimi",x=>fmtKm(x)],
+  ["yag_tipi","Motor yağı"],["yag_kapasitesi_l","Yağ kapasitesi",x=>x+" L"],
+  ["bakim_araligi_km","Periyodik bakım",x=>"Her "+fmtKm(x)],["lastik","Lastik ölçüsü"],
+  ["aku","Akü"],["yakit_deposu_l","Yakıt deposu",x=>x+" L"],["ortalama_tuketim","Ortalama tüketim"],["bagaj_l","Bagaj",x=>x+" L"]
 ];
 let specJob=null;
-const CQ="https://www.carqueryapi.com/api/0.3/";
-const MAKE_ALIAS={"Citroën":"citroen","KGM (SsangYong)":"ssangyong","DS Automobiles":"ds","MINI":"mini","Mercedes-Benz":"mercedes-benz","Land Rover":"land-rover","Alfa Romeo":"alfa-romeo","Aston Martin":"aston-martin","Rolls-Royce":"rolls-royce"};
-const MODEL_ALIAS={"Egea Sedan":"Tipo","Egea Hatchback":"Tipo","Egea Cross":"Tipo","Egea Station Wagon":"Tipo","Accent Blue":"Accent","Accent Era":"Accent","Symbol":"Thalia","Clio Symbol":"Thalia","Courier":"Transit Courier","Astra Classic":"Astra","Megane Sedan":"Megane","Şahin":"131","Doğan":"131","Kartal":"131","Murat 131":"131","Murat 124":"124"};
-function cqMake(b){return MAKE_ALIAS[b]||b.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/ı/g,"i").replace(/\s+/g,"-")}
-function cqModels(m){
-  const out=[];const add=x=>{if(x&&!out.includes(x))out.push(x)};
-  add(MODEL_ALIAS[m]);
-  let r=m.match(/^(\d) Serisi/);if(r)add(r[1]+" Series");
-  r=m.match(/^([A-Z]) Serisi/);if(r)add(r[1]+"-Class");
-  add(m);add(m.split(" ")[0]);
-  return out;
+const GEMINI_MODELS=["gemini-flash-latest","gemini-2.5-flash","gemini-2.0-flash"];
+const GEMINI_KEY_URL="https://aistudio.google.com/apikey";
+function geminiErr(status,body){
+  const m=String(body&&body.error&&body.error.message||"").toLowerCase();
+  if(status===400&&(m.includes("api key")||m.includes("api_key")))return "Gemini anahtarı geçersiz. Ayarlar'dan anahtarı kontrol et.";
+  if(status===403)return "Bu Gemini anahtarının yetkisi yok. AI Studio'dan yeni bir anahtar oluşturup Ayarlar'a gir.";
+  if(status===429)return "Gemini günlük ücretsiz kotası doldu. Yarın tekrar dene.";
+  return null;
 }
-function jsonp(url){
-  return new Promise((res,rej)=>{
-    const cb="cq"+Date.now()+Math.floor(Math.random()*1e5),s=document.createElement("script");
-    const done=()=>{clearTimeout(t);try{delete window[cb]}catch(e){window[cb]=undefined}s.remove()};
-    const t=setTimeout(()=>{done();rej(new Error("timeout"))},15000);
-    window[cb]=d=>{done();res(d)};
-    s.onerror=()=>{done();rej(new Error("network"))};
-    s.src=url+"&callback="+cb;document.head.appendChild(s);
-  });
-}
-const num=x=>{const n=parseFloat(x);return isFinite(n)&&n>0?n:null};
-function trFuel(f){f=String(f||"").toLowerCase();if(!f)return null;if(f.includes("diesel"))return "Dizel";if(f.includes("electric"))return "Elektrik";if(f.includes("hybrid"))return "Hibrit";if(f.includes("lpg")||f.includes("gas"))return "Benzin / LPG";return "Benzin"}
-function trGear(g){g=String(g||"").toLowerCase();if(!g)return null;if(g.includes("auto")||g.includes("cvt")||g.includes("dct"))return "Otomatik";return "Manuel"}
-function trDrive(d){d=String(d||"").toLowerCase();if(!d)return null;if(d.includes("front"))return "Önden çekiş";if(d.includes("rear"))return "Arkadan itiş";if(d.includes("all")||d.includes("4")||d.includes("four"))return "4x4 / AWD";return d}
-function normTrim(t){
-  const cc=num(t.model_engine_cc),ps=num(t.model_engine_power_ps)||(num(t.model_engine_power_hp)?Math.round(num(t.model_engine_power_hp)*1.014):null);
-  const lkm=num(t.model_lkm_mixed)||num(t.model_lkm_city);
-  const ad=[cc?(cc/1000).toFixed(1):null,t.model_trim||null,ps?ps+" PS":null,trGear(t.model_transmission_type)].filter(Boolean).join(" ");
-  return {ad:ad||t.model_name,yil:t.model_year,motor_hacmi_cc:cc?Math.round(cc):null,guc_hp:ps?Math.round(ps):null,tork_nm:num(t.model_engine_torque_nm)?Math.round(num(t.model_engine_torque_nm)):null,
-    silindir:num(t.model_engine_cyl),yakit:trFuel(t.model_engine_fuel),vites:trGear(t.model_transmission_type),ceker:trDrive(t.model_drive),kasa:t.model_body||null,
-    yakit_deposu_l:num(t.model_fuel_cap_l),ortalama_tuketim:lkm?lkm.toFixed(1).replace(".",","):null,maks_hiz:num(t.model_top_speed_kph),hizlanma:num(t.model_0_to_100_kph),agirlik:num(t.model_weight_kg)};
-}
-async function lookupTrims(v){
-  const make=encodeURIComponent(cqMake(v.brand));
-  for(const m of cqModels(v.model)){
-    const mm=encodeURIComponent(m);
-    let d=await jsonp(`${CQ}?cmd=getTrims&make=${make}&model=${mm}&year=${v.year}`);
-    let trims=(d&&d.Trims)||[];let note=null;
-    if(!trims.length){
-      d=await jsonp(`${CQ}?cmd=getTrims&make=${make}&model=${mm}`);
-      trims=(d&&d.Trims)||[];
-      if(trims.length){
-        const years=[...new Set(trims.map(t=>Number(t.model_year)))];
-        const best=years.sort((a,b)=>Math.abs(a-v.year)-Math.abs(b-v.year))[0];
-        trims=trims.filter(t=>Number(t.model_year)===best);
-        note=`${v.year} için kayıt yok, en yakın yıl olan ${best} verileri gösteriliyor.`;
-      }
-    }
-    if(trims.length){
-      if(m!==v.model)note=[`Veritabanında "${m}" adıyla bulundu.`,note].filter(Boolean).join(" ");
-      const seen=new Set(),list=[];
-      trims.map(normTrim).forEach(x=>{const k=[x.motor_hacmi_cc,x.guc_hp,x.yakit,x.vites].join("|");if(!seen.has(k)){seen.add(k);list.push(x)}});
-      return {list:list.slice(0,12),note};
-    }
+async function geminiCall(key,body,signal){
+  let lastErr="Gemini'ye ulaşılamadı. Biraz sonra tekrar dene.";
+  for(const model of GEMINI_MODELS){
+    let r;
+    try{r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":key},body:JSON.stringify(body),signal})}
+    catch(e){if(e&&e.name==="AbortError")throw e;throw new Error(navigator.onLine===false?"İnternet bağlantısı yok. Bağlanınca tekrar dene.":"Gemini'ye ulaşılamadı. Bağlantını kontrol edip tekrar dene.")}
+    let j=null;try{j=await r.json()}catch(e){}
+    if(r.ok)return j;
+    const msg=geminiErr(r.status,j);if(msg)throw new Error(msg);
+    if(r.status===404||r.status===400)continue; // model not available for this key, try the next one
+    lastErr="Gemini şu an yanıt vermiyor. Biraz sonra tekrar dene.";
   }
-  return {list:[],note:null};
+  throw new Error(lastErr);
+}
+function parseJsonText(t){
+  t=String(t||"").replace(/```json|```/g,"");
+  const a=t.indexOf("{"),b=t.lastIndexOf("}");if(a<0||b<=a)return null;
+  try{return JSON.parse(t.slice(a,b+1))}catch(e){return null}
+}
+async function testGeminiKey(key){
+  const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models?pageSize=1",{headers:{"x-goog-api-key":key}}).catch(()=>null);
+  if(!r)return "Bağlantı kurulamadı. İnternetini kontrol et.";
+  if(r.ok)return null;
+  let j=null;try{j=await r.json()}catch(e){}
+  return geminiErr(r.status,j)||"Anahtar doğrulanamadı.";
 }
 
 function specsHTML(v){
   const head=(btn)=>`<div class="section-h"><h3>Fabrika verileri</h3>${btn||""}</div>`;
-  if(specJob&&specJob.id===v.id)return head()+
-    `<div class="specbox loading"><div class="spin"></div><div><b>${esc(v.brand)} ${esc(v.model)} ${v.year}</b> için motor seçenekleri internetten getiriliyor…</div></div>`;
+  if(specJob&&specJob.id===v.id)return head(`<button class="link-btn" id="specStop">Durdur</button>`)+
+    `<div class="specbox loading"><div class="spin"></div><div><b>${esc(v.brand)} ${esc(v.model)} ${v.year}</b> için teknik bilgiler internette aranıyor…<div class="hint">10–30 saniye sürebilir.</div></div></div>`;
+  if(!S.settings.geminiKey)return head()+`<div class="specbox"><div>Motor, yağ, triger, lastik ve bakım aralığı bilgilerini internetten otomatik getirmek için ücretsiz Gemini anahtarını bir kez Ayarlar'a gir.</div><button class="btn btn-ghost" id="specKey">Anahtar ekle</button></div>`;
   if(v.specError)return head()+`<div class="specbox"><div>${esc(v.specError)}</div><button class="btn btn-ghost" id="specRetry">Tekrar dene</button></div>`;
-  if(!v.variants||!v.variants.length)return head()+`<div class="specbox"><div>Motor hacmi, güç, tork, depo ve tüketim gibi bilgileri internetten otomatik doldurabilirim.</div><button class="btn btn-ghost" id="specRetry">Teknik bilgileri getir</button></div>`;
+  if(!v.variants||!v.variants.length)return head()+`<div class="specbox"><div>Motor seçenekleri ve teknik bilgiler internetten getirilebilir.</div><button class="btn btn-ghost" id="specRetry">Teknik bilgileri getir</button></div>`;
   const cur=v.variants[v.spec||0]||v.variants[0];
   const rows=SPEC_FIELDS.filter(([k])=>cur[k]!=null&&cur[k]!=="").map(([k,l,f])=>`<div class="spec"><span class="label">${l}</span><span class="v num">${esc(f?f(cur[k]):cur[k])}</span></div>`);
   if(rows.length%2)rows.push(`<div class="spec"></div>`);
+  const src=(v.specSources||[]).slice(0,4);
   return head(`<button class="link-btn" id="specRefresh">Yenile</button>`)+
     `<div class="field"><label class="label" for="specPick">Motor seçeneği</label>
       <select id="specPick">${v.variants.map((x,i)=>`<option value="${i}" ${i===(v.spec||0)?"selected":""}>${esc(x.ad||("Seçenek "+(i+1)))}</option>`).join("")}</select></div>
-    ${rows.length?`<div class="specs">${rows.join("")}</div>`:`<div class="specbox">Bu seçenek için ayrıntılı değer yok.</div>`}
-    ${v.specNote?`<div class="hint">${esc(v.specNote)}</div>`:""}
-    <div class="hint">Kaynak: CarQuery açık araç veritabanı${v.specDate?", "+fmtDate(v.specDate):""}. Yağ, triger ve lastik bilgilerini Aracım bölümünden Düzenle ile girebilirsin.</div>`;
+    ${rows.length?`<div class="specs">${rows.join("")}</div>`:`<div class="specbox">Bu seçenek için ayrıntılı değer bulunamadı.</div>`}
+    ${cur.not?`<div class="hint">${esc(cur.not)}</div>`:""}
+    <div class="hint">İnternetten getirildi${v.specDate?", "+fmtDate(v.specDate):""}${src.length?". Kaynaklar: "+src.map(s=>esc(s)).join(", "):""}. Kritik bilgileri (yağ normu, triger) kullanım kılavuzu veya servisle karşılaştır.</div>`;
 }
 function wireSpecs(v){
   const r=$("#specRetry");if(r)r.onclick=()=>fetchSpecs(v,true);
+  const k=$("#specKey");if(k)k.onclick=settingsSheet;
+  const st=$("#specStop");if(st)st.onclick=()=>specJob&&specJob.ctl.abort();
   const rf=$("#specRefresh");if(rf)armButton(rf,"Yeniden getir?",()=>fetchSpecs(v,true));
   const p=$("#specPick");if(p)p.onchange=()=>{v.spec=Number(p.value);applyVariant(v);save();renderDetail();toast("Motor seçeneği güncellendi")};
 }
 function applyVariant(v){
-  const x=v.variants[v.spec||0];if(!x)return;
-  if(x.ad)v.engine=x.ad;
-  if(x.yakit)v.fuel=x.yakit==="Benzin / LPG"?"LPG + Benzin":x.yakit;
-  if(x.vites)v.gear=x.vites;
+  const x=v.variants&&v.variants[v.spec||0];if(!x)return;
+  v.auto=v.auto||{};
+  const put=(field,val)=>{if(val==null||val==="")return;if(!v[field]||v.auto[field]){v[field]=val;v.auto[field]=true}};
+  const moto=v.type==="moto";
+  put("engine",moto&&x.motor_hacmi_cc?x.motor_hacmi_cc+" cc":x.ad);
+  if(x.yakit){const f=String(x.yakit).toLowerCase();put("fuel",f.includes("dizel")||f.includes("diesel")?"Dizel":f.includes("elektrik")?"Elektrik":f.includes("hibrit")||f.includes("hybrid")?"Hibrit":f.includes("lpg")?"LPG + Benzin":"Benzin")}
+  if(x.vites){const g=String(x.vites).toLowerCase();put("gear",/(cvt)/.test(g)&&moto?"Otomatik (CVT)":/(otomatik|dsg|cvt|edc|tiptronic|eat|dct|auto)/.test(g)?(moto&&/dct/.test(g)?"DCT":"Otomatik"):/yarı/.test(g)?"Yarı otomatik":"Manuel")}
+  if(Number(x.bakim_araligi_km)>0&&(!v.auto.interval&&!v.intervalSet||v.auto.interval)){v.interval=Number(x.bakim_araligi_km);v.auto.interval=true}
+  put("oil",x.yag_tipi);put("oilCap",x.yag_kapasitesi_l!=null?String(x.yag_kapasitesi_l).replace(".",","):"");
+  put("tire",x.lastik);put("battery",x.aku);
+  if(moto){put("power",x.guc_hp);put("cooling",x.sogutma);if(x.son_aktarma){const s=String(x.son_aktarma).toLowerCase();put("timing",s.includes("kay")||s.includes("belt")?"Kayış":s.includes("kardan")||s.includes("shaft")?"Kardan":"Zincir")}}
+  else if(x.triger){const s=String(x.triger).toLowerCase();put("timing",s.includes("zincir")||s.includes("chain")?"Zincir":"Kayış")}
+  put("timingKm",Number(x.triger_degisim_km)>0?Number(x.triger_degisim_km):"");
 }
 async function fetchSpecs(v,byUser){
-  specJob={id:v.id};v.specError=null;v.specTried=true;
-  if(curId===v.id)renderDetail();
+  const key=S.settings.geminiKey;
+  if(!key){if(curId===v.id)renderDetail();return}
+  const ctl=new AbortController();specJob={id:v.id,ctl};v.specError=null;v.specTried=true;
+  if(curId===v.id&&!$("#detail").hidden)renderDetail();
+  const moto=v.type==="moto";
+  const ex=moto
+    ?`{"variants":[{"ad":"125 cc eSP+ CVT","motor_hacmi_cc":125,"guc_hp":12.5,"tork_nm":11.8,"yakit":"Benzin","vites":"Otomatik (CVT)","sogutma":"Sıvı","son_aktarma":"Kayış","yag_tipi":"10W-30 (JASO MB)","yag_kapasitesi_l":0.8,"bakim_araligi_km":6000,"lastik":"110/70-14 / 130/70-13","aku":"12V 5Ah","yakit_deposu_l":8.1,"ortalama_tuketim":"2,2 L/100 km","not":null}]}`
+    :`{"variants":[{"ad":"1.4 Fire 95 HP Manuel","motor_hacmi_cc":1368,"guc_hp":95,"tork_nm":127,"yakit":"Benzin","vites":"5 ileri manuel","ceker":"Önden çekiş","triger":"Kayış","triger_degisim_km":120000,"yag_tipi":"5W-40 (Fiat 9.55535-S2)","yag_kapasitesi_l":3.8,"bakim_araligi_km":15000,"lastik":"195/65 R15","aku":"12V 60Ah","yakit_deposu_l":50,"ortalama_tuketim":"6,2 L/100 km","bagaj_l":520,"not":null}]}`;
+  const prompt=`Google'da arama yaparak şu ${moto?"motosiklet":"otomobil"} için güvenilir teknik verileri bul: ${v.brand} ${v.model}, ${v.year} model yılı, Türkiye pazarı.
+Üretici siteleri, kullanım kılavuzları, Türk bayi ve teknik özellik sayfaları gibi kaynakları kullan.
+Bu model yılında Türkiye'de (yoksa Avrupa'da) satılan motor seçeneklerini listele: en fazla 6, en yaygın olan ilk sırada.
+Her seçenek için bulduğun değerleri yaz. Bulamadığın veya emin olmadığın alanı null bırak, tahmin etme.
+Model adı veya yıl tam eşleşmiyorsa en yakın nesli kullan ve "not" alanında kısaca belirt.
+Metinler Türkçe olsun. Yanıtın yalnızca aşağıdaki biçimde tek bir JSON nesnesi olsun, öncesinde veya sonrasında başka metin yazma:
+${ex}
+Hiç güvenilir bilgi bulamazsan {"variants":[]} yaz.`;
+  const timer=setTimeout(()=>{if(specJob)specJob.timedOut=true;ctl.abort()},90000);
   try{
-    const {list,note}=await lookupTrims(v);
-    if(!list.length)v.specError=`${v.brand} ${v.model} internetteki veritabanında bulunamadı. Bilgileri Aracım bölümünden Düzenle ile girebilirsin.`;
-    else{v.variants=list;v.spec=0;v.specNote=note;v.specDate=today();applyVariant(v);if(byUser)toast("Teknik bilgiler güncellendi")}
+    const res=await geminiCall(key,{contents:[{role:"user",parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{temperature:0.1}},ctl.signal);
+    const cand=res&&res.candidates&&res.candidates[0];
+    const text=(cand&&cand.content&&cand.content.parts||[]).map(p=>p.text||"").join("");
+    const data=parseJsonText(text);
+    const list=data&&Array.isArray(data.variants)?data.variants.filter(x=>x&&typeof x==="object").slice(0,6):[];
+    list.forEach(x=>{for(const k in x){if(typeof x[k]==="string"){x[k]=x[k].trim().slice(0,80);if(!x[k]||/^(null|yok|bilinmiyor|-)$/i.test(x[k]))x[k]=null}}});
+    if(!list.length)v.specError=`${v.brand} ${v.model} ${v.year} için güvenilir teknik bilgi bulunamadı. Bilgileri Aracım bölümünden Düzenle ile girebilirsin.`;
+    else{
+      const chunks=(cand.groundingMetadata&&cand.groundingMetadata.groundingChunks)||[];
+      v.specSources=[...new Set(chunks.map(c=>c.web&&(c.web.title||c.web.uri)).filter(Boolean).map(s=>String(s).replace(/^https?:\/\/(www\.)?/,"").split("/")[0]))];
+      v.variants=list;v.spec=0;v.specDate=today();applyVariant(v);
+      if(byUser)toast("Teknik bilgiler güncellendi");
+    }
   }catch(e){
-    v.specError=navigator.onLine===false?"İnternet bağlantısı yok. Bağlanınca tekrar dene.":"Veri kaynağına ulaşılamadı. Biraz sonra tekrar dene.";
-  }finally{specJob=null;save();if(curId===v.id&&!$("#detail").hidden)renderDetail();}
+    if(e&&e.name==="AbortError")v.specError=specJob&&specJob.timedOut?"Arama çok uzun sürdü. Tekrar dene.":null;
+    else v.specError=(e&&e.message)||"Teknik bilgiler getirilemedi. Tekrar dene.";
+  }finally{clearTimeout(timer);specJob=null;save();if(curId===v.id&&!$("#detail").hidden)renderDetail();}
 }
 
 function armButton(btn,armedText,action){
@@ -1509,6 +1531,7 @@ function techSheet(){
     if($("#tYear").value)v.year=Number($("#tYear").value);
     v.oil=$("#tOil").value.trim();v.oilCap=$("#tOilCap").value.trim();v.timing=$("#tTim").value;
     v.timingKm=$("#tTimKm").value?Number($("#tTimKm").value):"";v.tire=$("#tTire").value.trim();v.battery=$("#tBat").value.trim();
+    v.auto={};v.intervalSet=true;
     save();closeSheet();renderDetail();toast("Teknik bilgiler kaydedildi");
   };
 }

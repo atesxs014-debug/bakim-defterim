@@ -36,7 +36,7 @@ Kalıcı indirme linki: `https://github.com/KULLANICI_ADIN/bakim-defterim/releas
 ## Veriler
 
 - Araçlar, bakım kayıtları ve fotoğraflar sadece telefonda saklanır. Uygulamayı silersen veriler de silinir.
-- Teknik bilgiler (motor, güç, tork, depo, tüketim vb.) internetten, CarQuery açık araç veritabanından çekilir. Bu veritabanında yağ, triger ve lastik bilgisi yok; bunları uygulamada Aracım > Düzenle'den bir kez girersin.
+- Fabrika verileri (motor seçenekleri, güç, tork, yağ, triger, lastik, bakım aralığı) Gemini ile Google'da aranarak getirilir. Ücretsiz anahtarı https://aistudio.google.com/apikey adresinden alıp uygulamada Ayarlar'a bir kez yapıştır.
 
 ## Özellikler (v1.1)
 
