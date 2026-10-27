@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#0E1114">
 <title>Bakım Defterim</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,13 +29,15 @@
   --ok:#3CC47A; --warn:#FFB23F; --bad:#FF6B5E; --plate-blue:#2556C4;
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.3); color-scheme:dark}
 
-html,body{height:100%}
-body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;overflow:hidden;overscroll-behavior:none;-webkit-text-size-adjust:100%;touch-action:manipulation}
+body{position:fixed;inset:0;width:100%;color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.45;-webkit-tap-highlight-color:transparent;background:var(--bg)}
 *{box-sizing:border-box}
 button,input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.screen{min-height:100%}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.scroll{flex:1;min-height:0;width:100%;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}
+.wrap{width:100%}
 h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:.01em;margin:0;text-wrap:balance}
 .label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
 .num{font-variant-numeric:tabular-nums}
@@ -56,6 +58,14 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:.01em;margi
 .field select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 20px) 22px,calc(100% - 15px) 22px;background-size:5px 5px;background-repeat:no-repeat;padding-right:38px}
 .field select:disabled{opacity:.5}
 .field textarea{min-height:80px;resize:vertical}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg label{cursor:pointer}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg span{display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;border:1px solid var(--line);border-radius:12px;background:var(--surface);font-weight:600}
+.seg svg{width:34px;height:18px;color:var(--muted)}
+.seg input:checked+span{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.seg input:checked+span svg{color:var(--accent-ink)}
+.seg input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .err{color:var(--bad);font-size:13px;min-height:18px}
 
@@ -68,7 +78,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:.01em;margi
 .plate.sm{font-size:15px;border-width:1.5px;border-radius:4px}
 
 /* Onboarding */
-#onb{padding-block:28px 40px}
+#onb .scroll>.wrap{padding-block:28px 40px}
 .onb-head{display:flex;flex-direction:column;gap:10px;margin-bottom:22px}
 .onb-head h1{font-size:40px;line-height:1}
 .onb-head p{margin:0;color:var(--muted);max-width:34ch}
@@ -78,7 +88,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:.01em;margi
 .form .btn-primary{margin-top:8px;width:100%}
 
 /* Welcome */
-#welcome{display:grid;place-items:center;min-height:100%;text-align:center;padding-block:40px;overflow:hidden;position:relative}
+#welcome{display:grid;place-items:center;text-align:center}
 #welcome .glow-bg{position:absolute;inset:-20%;background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--accent) 22%,transparent),transparent 55%);opacity:0;animation:bgIn 1.6s .2s ease forwards;pointer-events:none}
 .w-inner{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px}
 .w-hello{font-family:var(--f-display);font-size:22px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);opacity:0;animation:fadeUp .6s .1s ease forwards}
@@ -97,16 +107,16 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:.01em;margi
 @keyframes sweep{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}
 
 /* App header */
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
-.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg)}
+.topbar{flex:none;background:var(--bg)}
 .topbar .wrap{display:flex;align-items:center;gap:12px;padding-block:14px 12px}
 .topbar .grow{flex:1;min-width:0}
 .topbar h1{font-size:30px;line-height:1}
 .topbar .who{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* Vehicle grid — 4 per screen */
-#home .wrap.grid-wrap{padding-block:4px 24px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;grid-auto-rows:max(200px,calc((100dvh - 120px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px)) / 2))}
+.grid-wrap{flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;scroll-snap-type:y mandatory;padding-block:4px 14px}
+.grid{height:100%;display:grid;grid-template-columns:1fr 1fr;gap:12px;grid-auto-rows:calc(50% - 6px)}
+.vcard{scroll-snap-align:start}
 .vcard{appearance:none;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;padding:0;box-shadow:var(--shadow);min-width:0}
 .vcard .ph{flex:1;min-height:0;background:var(--surface2);position:relative;display:grid;place-items:center;overflow:hidden}
 .vcard .ph img{width:100%;height:100%;object-fit:cover;max-width:100%}
@@ -124,7 +134,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .pill.ok i{background:var(--ok)} .pill.warn i{background:var(--warn)} .pill.bad i{background:var(--bad)}
 
 /* Detail */
-#detail{padding-bottom:calc(110px + env(safe-area-inset-bottom,0px))}
+#dBody{padding-bottom:110px}
 .hero{position:relative;border-radius:18px;overflow:hidden;background:var(--surface2);aspect-ratio:16/10;max-width:100%;border:1px solid var(--line);display:grid;place-items:center}
 .hero img{width:100%;height:100%;object-fit:cover}
 .hero svg.car{width:55%;color:var(--muted);opacity:.5}
@@ -198,13 +208,14 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 }
 @media (max-width:360px){.checks{grid-template-columns:1fr}}
 </style>
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>body{margin:0}.field input,.field select,.field textarea{font-size:16px}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
 
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-car" viewBox="0 0 120 60"><path fill="currentColor" d="M18 40c0-2 1-4 3-5l10-3 13-11c3-2 6-3 10-3h20c4 0 8 2 11 5l9 9 12 2c3 1 5 3 5 6v6c0 2-1 3-3 3h-6a10 10 0 0 0-20 0H44a10 10 0 0 0-20 0h-3c-2 0-3-1-3-3zm30-11h20V22h-9c-2 0-4 1-5 2zm24 0h18l-6-6c-1-1-3-1-4-1h-8z"/><circle fill="currentColor" cx="34" cy="49" r="7"/><circle fill="currentColor" cx="92" cy="49" r="7"/></symbol>
+  <symbol id="i-moto" viewBox="0 0 120 60"><circle cx="24" cy="42" r="12" fill="none" stroke="currentColor" stroke-width="6"/><circle cx="96" cy="42" r="12" fill="none" stroke="currentColor" stroke-width="6"/><path fill="currentColor" d="M36 28h28l10-10h12l-4 7 15 17h-9l-9-9-9 13H52l-6-11H32z"/><path d="M76 10h10l5 9" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></symbol>
   <symbol id="i-back" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7"/></symbol>
   <symbol id="i-cam" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
   <symbol id="i-wrench" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14.5 6.5a4 4 0 0 0 5 5L12 19a2.1 2.1 0 0 1-3-3l7.5-7.5a4 4 0 0 1-2-2z"/></symbol>
@@ -213,7 +224,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 
 <!-- ONBOARDING / ADD VEHICLE -->
 <section id="onb" class="screen" hidden>
-  <div class="wrap">
+  <div class="scroll"><div class="wrap">
     <div class="onb-head">
       <svg class="gauge" viewBox="0 0 64 64" aria-hidden="true">
         <path d="M10 44a24 24 0 1 1 44 0" fill="none" stroke="var(--line)" stroke-width="6" stroke-linecap="round"/>
@@ -228,6 +239,13 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
       <div class="field" id="nameField">
         <label class="label" for="fName">Araç sahibi · Ad Soyad</label>
         <input id="fName" autocomplete="name" placeholder="Örn. Burak Yılmaz" maxlength="40">
+      </div>
+      <div class="field">
+        <span class="label">Araç tipi</span>
+        <div class="seg" role="radiogroup" aria-label="Araç tipi">
+          <label><input type="radio" name="fType" value="car" checked><span><svg viewBox="0 0 120 60" aria-hidden="true"><use href="#i-car"/></svg>Otomobil</span></label>
+          <label><input type="radio" name="fType" value="moto"><span><svg viewBox="0 0 120 60" aria-hidden="true"><use href="#i-moto"/></svg>Motosiklet</span></label>
+        </div>
       </div>
       <div class="field">
         <label class="label" for="fPlate">Plaka</label>
@@ -255,7 +273,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
       <button class="btn btn-primary" type="submit">Kaydet</button>
       <button class="btn btn-ghost" type="button" id="cancelAdd" hidden>Vazgeç</button>
     </form>
-  </div>
+  </div></div>
 </section>
 
 <!-- WELCOME -->
@@ -290,7 +308,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
     <div class="grow"><div class="who">Araçlarım</div></div>
     <div id="dPlateTop"></div>
   </div></header>
-  <div class="wrap" id="dBody"></div>
+  <div class="scroll"><div class="wrap" id="dBody"></div></div>
   <button class="btn btn-primary fab" id="addRec"><svg width="20" height="20"><use href="#i-wrench"/></svg> Bakım ekle</button>
   <input type="file" id="photoIn" accept="image/*" hidden>
 </section>
@@ -367,6 +385,46 @@ const BRANDS={};
 BRAND_DATA.split("\n").forEach(l=>{const i=l.indexOf(":");BRANDS[l.slice(0,i).trim()]=l.slice(i+1).split("|").map(s=>s.trim()).sort((a,b)=>a.localeCompare(b,"tr",{numeric:true}))});
 const POPULAR=["Fiat","Renault","Volkswagen","Toyota","Hyundai","Ford","Opel","Peugeot","Dacia","Honda","Togg","BMW","Mercedes-Benz","Citroën","Skoda"];
 const OTHER="__other";
+const MOTOS={};
+`Aprilia:RS 125|RS 457|RS 660|RSV4|SR GT|SX 125|Tuareg 660|Tuono 660|Tuono V4
+Arora:Cappucino|Freedom|Prince|Rider|Smart|Tornado|Zeus
+Asya:Cappucino|Dilber|Gold|Jumbo|Ramada
+Bajaj:Boxer|Dominar 250|Dominar 400|Pulsar N250|Pulsar NS125|Pulsar NS200|Pulsar RS200
+Benelli:752S|BN 125|BN 251|Imperiale 400|Leoncino 250|Leoncino 500|Leoncino 800|TNT 125|TNT 249|TRK 251|TRK 502|TRK 702
+BMW Motorrad:C 400 GT|C 400 X|C 650 GT|CE 04|F 700 GS|F 750 GS|F 800 GS|F 850 GS|F 900 R|F 900 XR|G 310 GS|G 310 R|K 1600 GT|R 1200 GS|R 1250 GS|R 1250 RT|R 1300 GS|R nineT|S 1000 R|S 1000 RR|S 1000 XR
+CFMoto:250 NK|300 NK|300 SR|450 MT|450 NK|450 SR|650 MT|650 NK|700 CL-X|800 MT|800 NK|CForce
+Daelim:Daystar|Delfino|Otello|Roadwin|S2|VJF
+Ducati:DesertX|Diavel|Hypermotard|Monster|Multistrada V2|Multistrada V4|Panigale V2|Panigale V4|Scrambler|Streetfighter V2|Streetfighter V4|SuperSport|XDiavel
+Falcon:Crown|Dolphin|Eagle|Hawk|Peak|Smart
+Harley-Davidson:Breakout|Fat Bob|Fat Boy|Forty-Eight|Heritage Classic|Iron 883|Low Rider|Nightster|Pan America|Road Glide|Road King|Sportster S|Street 750|Street Bob|Street Glide|X350|X500
+Hero:Dash|Glamour|Hunk|Ignitor|Maestro|Splendor|Xpulse 200
+Honda:Activa|Africa Twin|CB125F|CB125R|CB250R|CB500F|CB500X|CB650R|CBF150|CBR1000RR|CBR250R|CBR500R|CBR650R|CRF250L|CRF300L|Dio|Forza 125|Forza 250|Forza 350|Forza 750|Gold Wing|Integra|Monkey|MSX125 Grom|NC750X|NT1100|PCX 125|SH125|SH150|SH300|Spacy|Transalp|Wave 110|X-ADV
+Husqvarna:701 Enduro|FE 250|FE 350|Norden 901|Svartpilen 125|Svartpilen 401|Svartpilen 801|TE 300|Vitpilen 401|Vitpilen 801
+Kawasaki:ER-6f|ER-6n|KLR650|Ninja 1000SX|Ninja 250|Ninja 300|Ninja 400|Ninja 500|Ninja 650|Ninja ZX-10R|Ninja ZX-6R|Versys 1000|Versys 650|Vulcan S|Z1000|Z125|Z250|Z300|Z400|Z500|Z650|Z650RS|Z750|Z800|Z900|Z900RS
+KTM:125 Duke|1290 Super Adventure|1290 Super Duke|200 Duke|250 Duke|390 Adventure|390 Duke|390 Enduro R|690 Duke|690 Enduro R|790 Duke|890 Adventure|890 Duke|990 Duke|EXC 250|EXC 300|RC 125|RC 200|RC 390
+Kuba:Blueberry|Çita|Kanuni|Ranger|Superlight|TK|Trendy|Vortex
+Kymco:Agility|AK 550|CV3|DT X360|Downtown|Like|People S|Super 8|X-Town|Xciting
+Mondial:Cappucino|Drift L|Flower|Hussar|Lavinia|Masti|MX|Nevada|Paso|Strada|Touring|Turkuaz|Wing|X-Treme|Zevk
+Moto Guzzi:Stelvio|V100 Mandello|V7|V85 TT
+MV Agusta:Brutale|Dragster|F3|Turismo Veloce
+Peugeot Motocycles:Django|Kisbee|Metropolis|Pulsion|Speedfight|Tweet|XP400
+Piaggio:1|Beverly|Liberty|Medley|MP3|Zip
+QJ Motor:Fort 350|SRK 125|SRK 250|SRK 400|SRK 600|SRK 700|SRT 550|SRT 700|SRT 800|SRV 550
+RKS:Azure|Bitter|Blackster|Blade|Freccia|Gentle|Jet|Newlight|RN 125|Sniper|Spontini|Titanic|TNT|Wildcat
+Royal Enfield:Bullet 350|Classic 350|Continental GT 650|Himalayan|Hunter 350|Interceptor 650|Meteor 350|Scram 411|Shotgun 650|Super Meteor 650
+Suzuki:Address|Bandit 650|Burgman 125|Burgman 200|Burgman 400|GN125|GS500|GSR600|GSR750|GSX-8S|GSX-R1000|GSX-R125|GSX-R600|GSX-R750|GSX-S1000|GSX-S125|GSX-S750|Hayabusa|Intruder|SV650|V-Strom 1050|V-Strom 250|V-Strom 650|V-Strom 800
+SYM:ADX 125|Cruisym|Fiddle|Jet 14|Jet X|Joymax|Maxsym|NH-T|Orbit|Symphony|Wolf
+Triumph:Bonneville T100|Bonneville T120|Daytona 660|Rocket 3|Scrambler 1200|Scrambler 400 X|Scrambler 900|Speed 400|Speed Triple|Speed Twin|Street Triple|Thruxton|Tiger 1200|Tiger 660|Tiger 850|Tiger 900|Trident 660
+TVS:Apache RR 310|Apache RTR 160|Apache RTR 200|Jupiter|Ntorq|Raider
+Vespa:Elettrica|GTS 125|GTS 300|GTV|LX 125|Primavera 125|Primavera 150|Sprint 125|Sprint 150
+Voge:300AC|300DS|300R|500DS|525DSX|525R|650DS|900DSX|SR4 Max
+Yamaha:Aerox|Crypton|Delight|FZ25|FZ6|FZS|MT-03|MT-07|MT-09|MT-10|MT-125|MT-25|NMAX 125|NMAX 155|R1|R125|R25|R3|R6|R7|Tenere 700|Tmax|Tracer 7|Tracer 9|Tricity|X-Max 125|X-Max 250|X-Max 300|XSR125|XSR700|XSR900|YBR125|Zuma
+Yuki:Brio|Crypto|Fine|Gold|Kaplan|Taxi|Triangle|Wind
+Zontes:125 G1|125 U1|350 D|350 R|350 T|350 X|ZT 368`.split("\n").forEach(l=>{const i=l.indexOf(":");MOTOS[l.slice(0,i).trim()]=l.slice(i+1).split("|").map(s=>s.trim()).sort((a,b)=>a.localeCompare(b,"tr",{numeric:true}))});
+const POPULAR_MOTO=["Honda","Yamaha","Mondial","Kuba","RKS","Bajaj","Suzuki","Kawasaki","CFMoto","Kymco","SYM","Vespa","BMW Motorrad","KTM"];
+let FTYPE="car";
+const CAT=()=>FTYPE==="moto"?MOTOS:BRANDS;
+const MOTO_ITEMS=["Motor yağı","Yağ filtresi","Hava filtresi","Buji","Zincir yağlama","Zincir gerginlik ayarı","Zincir-dişli seti","CVT kayışı","Varyatör bilyaları","Debriyaj balatası","Fren balatası","Fren diski","Fren hidroliği","Soğutma sıvısı","Valf ayarı","Akü","Lastik değişimi","Muayene"];
 const ITEMS=["Motor yağı","Yağ filtresi","Hava filtresi","Polen filtresi","Yakıt filtresi","Buji","Fren balatası","Fren diski","Fren hidroliği","Antifriz","Triger seti","V kayışı","Debriyaj","Akü","Lastik değişimi","Rot balans","Klima gazı","Muayene"];
 const CUR_YEAR=new Date().getFullYear();
 const KEY="bakim-defterim-v1";
@@ -385,9 +443,9 @@ function load(){try{const r=localStorage.getItem(KEY);if(r)S=JSON.parse(r)}catch
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));return true}catch(e){toast("Kaydedilemedi: telefon hafızası dolu olabilir. Daha küçük bir fotoğraf dene.");return false}}
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove("show"),2600)}
 
-function show(id){["onb","welcome","home","detail"].forEach(s=>$("#"+s).hidden=s!==id);window.scrollTo(0,0)}
+function show(id){["onb","welcome","home","detail"].forEach(s=>$("#"+s).hidden=s!==id);document.querySelectorAll(".scroll,.grid-wrap").forEach(e=>e.scrollTop=0)}
 function plateHTML(p,size){return `<div class="plate ${size}"><span class="tr">TR</span><span class="pn">${esc(p||"—")}</span></div>`}
-function carSvg(){return `<svg class="car" viewBox="0 0 120 60" aria-hidden="true"><use href="#i-car"/></svg>`}
+function carSvg(v){return `<svg class="car" viewBox="0 0 120 60" aria-hidden="true"><use href="#i-${v&&v.type==="moto"?"moto":"car"}"/></svg>`}
 function normPlate(v){
   const s=v.toUpperCase().replace(/[^0-9A-ZÇĞİÖŞÜ]/g,"");
   const m=s.match(/^(\d{1,2})([A-ZÇĞİÖŞÜ]{1,3})?(\d{0,5})?/);
@@ -399,7 +457,7 @@ function normPlate(v){
 function status(v){
   const recs=(v.records||[]).slice().sort((a,b)=>b.date.localeCompare(a.date));
   if(!recs.length)return {cls:"",text:"Kayıt yok",none:true};
-  const last=recs[0], interval=Number(v.interval)||10000;
+  const last=recs[0], interval=Number(v.interval)||(v.type==="moto"?5000:10000);
   const curKm=Math.max(Number(v.km)||0,...recs.map(r=>Number(r.km)||0));
   const dueKm=(Number(last.km)||0)+interval;
   const dueDate=new Date(last.date+"T12:00:00");dueDate.setFullYear(dueDate.getFullYear()+1);
@@ -415,25 +473,28 @@ function status(v){
 
 /* --- Onboarding form --- */
 function fillSelects(){
-  const all=Object.keys(BRANDS).sort((a,b)=>a.localeCompare(b,"tr"));
+  const C=CAT(),POP=FTYPE==="moto"?POPULAR_MOTO:POPULAR;
+  const all=Object.keys(C).sort((a,b)=>a.localeCompare(b,"tr"));
   const b=$("#fBrand");b.innerHTML='<option value="">Seç</option>'+
-    `<optgroup label="Türkiye'de en çok tercih edilenler">${POPULAR.map(k=>`<option>${esc(k)}</option>`).join("")}</optgroup>`+
+    `<optgroup label="Türkiye'de en çok tercih edilenler">${POP.map(k=>`<option>${esc(k)}</option>`).join("")}</optgroup>`+
     `<optgroup label="Tüm markalar (A–Z)">${all.map(k=>`<option>${esc(k)}</option>`).join("")}</optgroup>`+
     `<option value="${OTHER}">Listede yok, kendim yazacağım</option>`;
-  const nModels=all.reduce((s,k)=>s+BRANDS[k].length,0);
-  $("#brandCount").textContent=`${all.length} marka, ${nModels.toLocaleString("tr-TR")} model. Teknik bilgiler internetten otomatik getirilir.`;
+  const nModels=all.reduce((s,k)=>s+C[k].length,0);
+  $("#brandCount").textContent=`${all.length} marka, ${nModels.toLocaleString("tr-TR")} model.${FTYPE==="moto"?"":" Teknik bilgiler internetten otomatik getirilir."}`;
+  const m=$("#fModel");m.disabled=true;m.hidden=false;m.innerHTML='<option value="">Önce marka</option>';$("#fBrandTxt").hidden=true;$("#fModelTxt").hidden=true;
   const y=$("#fYear");let o='<option value="">Seç</option>';
   for(let yr=CUR_YEAR;yr>=CUR_YEAR-35;yr--){const age=CUR_YEAR-yr;o+=`<option value="${yr}">${age===0?"Sıfır km":age+" yaşında"} · ${yr} model</option>`}
   y.innerHTML=o;
 }
 $("#fBrand").addEventListener("change",e=>{
-  const m=$("#fModel"),val=e.target.value,list=BRANDS[val];
+  const m=$("#fModel"),val=e.target.value,list=CAT()[val];
   $("#fBrandTxt").hidden=val!==OTHER;
   $("#fModelTxt").hidden=true;m.hidden=false;
   if(val===OTHER){m.hidden=true;$("#fModelTxt").hidden=false;$("#fBrandTxt").focus();return}
   if(!list){m.disabled=true;m.innerHTML='<option value="">Önce marka</option>';return}
   m.disabled=false;m.innerHTML='<option value="">Seç</option>'+list.map(x=>`<option>${esc(x)}</option>`).join("")+`<option value="${OTHER}">Listede yok, kendim yazacağım</option>`;
 });
+document.querySelectorAll('input[name="fType"]').forEach(r=>r.addEventListener("change",()=>{FTYPE=r.value;fillSelects()}));
 $("#fModel").addEventListener("change",e=>{
   const other=e.target.value===OTHER;$("#fModelTxt").hidden=!other;if(other)$("#fModelTxt").focus();
 });
@@ -445,6 +506,7 @@ function openOnb(isAdd){
   addMode=isAdd;
   $("#vform").reset();$("#fModel").disabled=true;$("#fModel").hidden=false;$("#fModel").innerHTML='<option value="">Önce marka</option>';
   $("#fBrandTxt").hidden=true;$("#fModelTxt").hidden=true;
+  FTYPE="car";fillSelects();
   $("#platePrev .pn").textContent="48 ABC 123";$("#fErr").textContent="";
   $("#nameField").hidden=isAdd;$("#cancelAdd").hidden=!isAdd;
   $("#onbTitle").textContent=isAdd?"Yeni araç":"Bakım Defterim";
@@ -464,7 +526,7 @@ $("#vform").addEventListener("submit",e=>{
   if(!brand)miss.push("marka");if(!model)miss.push("model");if(!year)miss.push("araç yaşı");
   if(miss.length){$("#fErr").textContent="Eksik: "+miss.join(", ")+".";return}
   if(!addMode)S.owner={name};
-  const v={id:uid(),plate,brand,model,year:Number(year),photo:null,fuel:"",gear:"",engine:"",color:"",km:"",interval:10000,records:[]};
+  const v={id:uid(),type:FTYPE,plate,brand,model,year:Number(year),photo:null,fuel:FTYPE==="moto"?"Benzin":"",gear:"",engine:"",color:"",km:"",interval:FTYPE==="moto"?5000:10000,records:[]};
   S.vehicles.push(v);save();
   if(addMode){curId=v.id;renderDetail();show("detail");toast("Araç eklendi")}
   else welcome(v);
@@ -495,7 +557,7 @@ function renderHome(){
   g.innerHTML=S.vehicles.map(v=>{
     const st=status(v);
     return `<button class="vcard" data-id="${v.id}">
-      <div class="ph">${v.photo?`<img src="${v.photo}" alt="">`:carSvg()}
+      <div class="ph">${v.photo?`<img src="${v.photo}" alt="">`:carSvg(v)}
         <span class="pill ${st.cls}"><i></i>${st.text}</span></div>
       <div class="meta">${plateHTML(v.plate,"sm")}<div class="bm">${esc(v.brand)} ${esc(v.model)}</div><div class="yr">${v.year} · ${CUR_YEAR-v.year===0?"sıfır":(CUR_YEAR-v.year)+" yaşında"}</div></div>
     </button>`}).join("")+
@@ -513,6 +575,7 @@ $("#editOwner").onclick=()=>{
 /* --- Detail --- */
 const cur=()=>S.vehicles.find(v=>v.id===curId);
 function renderDetail(){
+  const moto=(cur()||{}).type==="moto";
   const v=cur();if(!v){goHome();return}
   const st=status(v);
   $("#dPlateTop").innerHTML=plateHTML(v.plate,"sm");
@@ -534,7 +597,7 @@ function renderDetail(){
   }
   const sp=(l,val)=>`<div class="spec"><span class="label">${l}</span><span class="v num">${val||'<span style="color:var(--muted);font-weight:400">Eklenmedi</span>'}</span></div>`;
   $("#dBody").innerHTML=`
-    <div class="hero">${v.photo?`<img src="${v.photo}" alt="${esc(v.brand+" "+v.model)}">`:carSvg()}
+    <div class="hero">${v.photo?`<img src="${v.photo}" alt="${esc(v.brand+" "+v.model)}">`:carSvg(v)}
       <button class="photo-btn" id="photoBtn"><svg><use href="#i-cam"/></svg>${v.photo?"Fotoğrafı değiştir":"Fotoğraf ekle"}</button></div>
     <div class="d-title"><h2>${esc(v.brand)} ${esc(v.model)}</h2>
       <div class="sub">${v.year} model · ${CUR_YEAR-v.year===0?"sıfır km":(CUR_YEAR-v.year)+" yaşında"} · Sahibi ${esc(S.owner?.name||"")}</div></div>
@@ -542,15 +605,16 @@ function renderDetail(){
     <div class="section"><div class="section-h"><h3>Aracım</h3><button class="link-btn" id="editTech">Düzenle</button></div>
       <div class="specs">
         ${sp("Güncel km",v.km||st.curKm?fmtKm(Math.max(Number(v.km)||0,st.curKm||0)):"")}
-        ${sp("Bakım aralığı",fmtKm(v.interval||10000))}
-        ${sp("Yakıt",esc(v.fuel))}${sp("Vites",esc(v.gear))}
-        ${sp("Motor",esc(v.engine))}${sp("Renk",esc(v.color))}
+        ${sp("Bakım aralığı",fmtKm(v.interval||(moto?5000:10000)))}
+        ${sp("Yakıt",esc(v.fuel))}${sp(moto?"Şanzıman":"Vites",esc(v.gear))}
+        ${sp(moto?"Motor hacmi":"Motor",esc(v.engine))}${moto?sp("Güç",v.power?esc(v.power)+" HP":""):sp("Renk",esc(v.color))}
+        ${moto?sp("Soğutma",esc(v.cooling))+sp("Renk",esc(v.color)):""}
         ${sp("Motor yağı",esc(v.oil))}${sp("Yağ kapasitesi",v.oilCap?esc(v.oilCap)+" L":"")}
-        ${sp("Triger",esc(v.timing))}${sp("Triger değişimi",v.timingKm?fmtKm(v.timingKm):"")}
-        ${sp("Lastik ölçüsü",esc(v.tire))}${sp("Akü",esc(v.battery))}
+        ${sp(moto?"Son aktarma":"Triger",esc(v.timing))}${sp(moto?"Zincir/kayış değişimi":"Triger değişimi",v.timingKm?fmtKm(v.timingKm):"")}
+        ${sp(moto?"Lastik (ön / arka)":"Lastik ölçüsü",esc(v.tire))}${sp("Akü",esc(v.battery))}
         ${sp("Toplam bakım",recs.length?recs.length+" kayıt":"")}${sp("Toplam masraf",totalCost?fmtTL(totalCost):"")}
       </div></div>
-    <div class="section" id="specSec">${specsHTML(v)}</div>
+    ${moto?"":`<div class="section" id="specSec">${specsHTML(v)}</div>`}
     <div class="section"><div class="section-h"><h3>Bakım geçmişi</h3></div>
       <div class="timeline">${recs.length?recs.map(r=>`
         <article class="rec"><div class="rh"><span class="date">${fmtDate(r.date)}</span><span class="km num">${fmtKm(r.km)}</span></div>
@@ -562,7 +626,7 @@ function renderDetail(){
   $("#photoBtn").onclick=()=>$("#photoIn").click();
   $("#editTech").onclick=techSheet;
   wireSpecs(v);
-  if(!v.variants&&!v.specTried&&!specJob)fetchSpecs(v,false);
+  if(!moto&&!v.variants&&!v.specTried&&!specJob)fetchSpecs(v,false);
   armButton($("#delVeh"),"Emin misin? Araç ve tüm kayıtları silinecek",()=>{S.vehicles=S.vehicles.filter(x=>x.id!==v.id);save();goHome();toast("Araç silindi")});
   document.querySelectorAll(".rec .del").forEach(b=>armButton(b,"Silmek için tekrar dokun",()=>{v.records=v.records.filter(r=>r.id!==b.dataset.rid);save();renderDetail();toast("Kayıt silindi")}));
 }
@@ -719,7 +783,7 @@ $("#addRec").onclick=()=>{
       <div class="field"><label class="label" for="rKm">Kilometre</label><input type="number" inputmode="numeric" id="rKm" placeholder="${st.curKm||"85000"}" min="0"></div>
     </div>
     <div class="field"><span class="label">Neler yapıldı?</span>
-      <div class="checks">${ITEMS.map((x,i)=>`<label class="check"><input type="checkbox" value="${esc(x)}" id="ri${i}">${esc(x)}</label>`).join("")}</div></div>
+      <div class="checks">${(v.type==="moto"?MOTO_ITEMS:ITEMS).map((x,i)=>`<label class="check"><input type="checkbox" value="${esc(x)}" id="ri${i}">${esc(x)}</label>`).join("")}</div></div>
     <div class="row2">
       <div class="field"><label class="label" for="rCost">Tutar (₺)</label><input type="number" inputmode="decimal" id="rCost" placeholder="4500" min="0"></div>
       <div class="field"><label class="label" for="rShop">Servis</label><input id="rShop" placeholder="Usta / servis adı" maxlength="40"></div>
@@ -738,42 +802,48 @@ $("#addRec").onclick=()=>{
 };
 
 function techSheet(){
+  const moto=cur().type==="moto";
   const v=cur();
   const sel=(id,opts,val)=>`<select id="${id}"><option value="">Seç</option>${opts.map(o=>`<option ${o===val?"selected":""}>${o}</option>`).join("")}</select>`;
   openSheet(`<h3>Teknik bilgiler</h3>
     <div class="row2">
       <div class="field"><label class="label" for="tKm">Güncel km</label><input type="number" inputmode="numeric" id="tKm" value="${esc(v.km)}" placeholder="85000"></div>
-      <div class="field"><label class="label" for="tInt">Bakım aralığı</label>${sel("tInt",["5.000 km","7.500 km","10.000 km","15.000 km","20.000 km","30.000 km"],(Number(v.interval)||10000).toLocaleString("tr-TR")+" km")}</div>
+      <div class="field"><label class="label" for="tInt">Bakım aralığı</label>${sel("tInt",moto?["3.000 km","4.000 km","5.000 km","6.000 km","8.000 km","10.000 km","12.000 km"]:["5.000 km","7.500 km","10.000 km","15.000 km","20.000 km","30.000 km"],(Number(v.interval)||(moto?5000:10000)).toLocaleString("tr-TR")+" km")}</div>
     </div>
     <div class="row2">
       <div class="field"><label class="label" for="tFuel">Yakıt</label>${sel("tFuel",["Benzin","Dizel","LPG + Benzin","Hibrit","Elektrik"],v.fuel)}</div>
-      <div class="field"><label class="label" for="tGear">Vites</label>${sel("tGear",["Manuel","Otomatik","Yarı otomatik"],v.gear)}</div>
+      <div class="field"><label class="label" for="tGear">${moto?"Şanzıman":"Vites"}</label>${sel("tGear",moto?["Manuel","Otomatik (CVT)","Yarı otomatik","DCT"]:["Manuel","Otomatik","Yarı otomatik"],v.gear)}</div>
     </div>
     <div class="row2">
-      <div class="field"><label class="label" for="tEng">Motor</label><input id="tEng" value="${esc(v.engine)}" placeholder="1.6 Multijet" maxlength="30"></div>
+      <div class="field"><label class="label" for="tEng">${moto?"Motor hacmi":"Motor"}</label><input id="tEng" value="${esc(v.engine)}" placeholder="${moto?"125 cc":"1.6 Multijet"}" maxlength="30"></div>
       <div class="field"><label class="label" for="tCol">Renk</label><input id="tCol" value="${esc(v.color)}" placeholder="Beyaz" maxlength="20"></div>
     </div>
     <div class="row2">
       <div class="field"><label class="label" for="tPlate">Plaka</label><input id="tPlate" value="${esc(v.plate)}" maxlength="12" style="text-transform:uppercase"></div>
       <div class="field"><label class="label" for="tYear">Model yılı</label>${sel("tYear",Array.from({length:36},(_,i)=>String(CUR_YEAR-i)),String(v.year))}</div>
     </div>
+    ${moto?`<div class="row2">
+      <div class="field"><label class="label" for="tPow">Güç (HP)</label><input type="number" inputmode="decimal" id="tPow" value="${esc(v.power)}" placeholder="12"></div>
+      <div class="field"><label class="label" for="tCool">Soğutma</label>${sel("tCool",["Hava","Sıvı (su)","Yağ / hava"],v.cooling)}</div>
+    </div>`:""}
     <div class="row2">
       <div class="field"><label class="label" for="tOil">Motor yağı</label><input id="tOil" value="${esc(v.oil)}" placeholder="5W-30" maxlength="30"></div>
       <div class="field"><label class="label" for="tOilCap">Yağ kapasitesi (L)</label><input id="tOilCap" inputmode="decimal" value="${esc(v.oilCap)}" placeholder="4,5" maxlength="6"></div>
     </div>
     <div class="row2">
-      <div class="field"><label class="label" for="tTim">Triger</label>${sel("tTim",["Kayış","Zincir","Bilmiyorum"],v.timing)}</div>
-      <div class="field"><label class="label" for="tTimKm">Triger değişimi (km)</label><input type="number" inputmode="numeric" id="tTimKm" value="${esc(v.timingKm)}" placeholder="120000"></div>
+      <div class="field"><label class="label" for="tTim">${moto?"Son aktarma":"Triger"}</label>${sel("tTim",moto?["Zincir","Kayış","Kardan"]:["Kayış","Zincir","Bilmiyorum"],v.timing)}</div>
+      <div class="field"><label class="label" for="tTimKm">${moto?"Zincir/kayış değişimi (km)":"Triger değişimi (km)"}</label><input type="number" inputmode="numeric" id="tTimKm" value="${esc(v.timingKm)}" placeholder="120000"></div>
     </div>
     <div class="row2">
-      <div class="field"><label class="label" for="tTire">Lastik ölçüsü</label><input id="tTire" value="${esc(v.tire)}" placeholder="205/55 R16" maxlength="20"></div>
+      <div class="field"><label class="label" for="tTire">${moto?"Lastik (ön / arka)":"Lastik ölçüsü"}</label><input id="tTire" value="${esc(v.tire)}" placeholder="${moto?"110/70-13 / 130/70-13":"205/55 R16"}" maxlength="20"></div>
       <div class="field"><label class="label" for="tBat">Akü</label><input id="tBat" value="${esc(v.battery)}" placeholder="12V 60Ah" maxlength="20"></div>
     </div>
     <div class="sheet-actions"><button class="btn btn-ghost" data-close>Vazgeç</button><button class="btn btn-primary" id="tSave">Kaydet</button></div>`);
   $("#tPlate").addEventListener("input",e=>e.target.value=normPlate(e.target.value));
   $("#tSave").onclick=()=>{
     v.km=$("#tKm").value?Number($("#tKm").value):"";
-    const iv=$("#tInt").value;v.interval=iv?Number(iv.replace(/\D/g,"")):10000;
+    const iv=$("#tInt").value;v.interval=iv?Number(iv.replace(/\D/g,"")):(moto?5000:10000);
+    if(moto){v.power=$("#tPow").value;v.cooling=$("#tCool").value}
     v.fuel=$("#tFuel").value;v.gear=$("#tGear").value;v.engine=$("#tEng").value.trim();v.color=$("#tCol").value.trim();
     if($("#tPlate").value.trim().length>=5)v.plate=$("#tPlate").value.trim();
     if($("#tYear").value)v.year=Number($("#tYear").value);

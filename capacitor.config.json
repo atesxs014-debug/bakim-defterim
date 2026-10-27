@@ -6,6 +6,7 @@
     "allowMixedContent": false
   },
   "ios": {
-    "contentInset": "never"
+    "contentInset": "never",
+    "scrollEnabled": false
   }
 }
