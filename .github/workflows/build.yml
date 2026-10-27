@@ -23,9 +23,17 @@ jobs:
           java-version: 21
       - name: Bağımlılıkları kur
         run: npm install
+      - name: Yardımcı betikleri kopyala
+        run: |
+          mkdir -p www/vendor
+          cp node_modules/tesseract.js/dist/tesseract.min.js www/vendor/
+          cp node_modules/@capacitor/core/dist/capacitor.js www/vendor/
+          ls -la www/vendor
       - name: Android projesini oluştur
         run: |
           npx cap add android
+          sed -i 's#<uses-permission android:name="android.permission.INTERNET" />#<uses-permission android:name="android.permission.INTERNET" />\n    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n    <uses-permission android:name="android.permission.CAMERA" />\n    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />#' android/app/src/main/AndroidManifest.xml
+          grep -c POST_NOTIFICATIONS android/app/src/main/AndroidManifest.xml
           npx cap sync android
       - name: APK derle
         working-directory: android
@@ -49,9 +57,19 @@ jobs:
           node-version: 22
       - name: Bağımlılıkları kur
         run: npm install
+      - name: Yardımcı betikleri kopyala
+        run: |
+          mkdir -p www/vendor
+          cp node_modules/tesseract.js/dist/tesseract.min.js www/vendor/
+          cp node_modules/@capacitor/core/dist/capacitor.js www/vendor/
+          ls -la www/vendor
       - name: iOS projesini oluştur
         run: |
           npx cap add ios
+          PL=ios/App/App/Info.plist
+          /usr/libexec/PlistBuddy -c "Add :NSCameraUsageDescription string 'Araç, belge ve gösterge fotoğrafı çekmek için kamera kullanılır.'" $PL
+          /usr/libexec/PlistBuddy -c "Add :NSPhotoLibraryUsageDescription string 'Araç ve belge fotoğrafı seçmek için galeri kullanılır.'" $PL
+          /usr/libexec/PlistBuddy -c "Add :NSPhotoLibraryAddUsageDescription string 'Çekilen fotoğrafları kaydetmek için.'" $PL
           npx cap sync ios
       - name: Derle (imzasız)
         run: |

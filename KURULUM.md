@@ -37,3 +37,15 @@ Kalıcı indirme linki: `https://github.com/KULLANICI_ADIN/bakim-defterim/releas
 
 - Araçlar, bakım kayıtları ve fotoğraflar sadece telefonda saklanır. Uygulamayı silersen veriler de silinir.
 - Teknik bilgiler (motor, güç, tork, depo, tüketim vb.) internetten, CarQuery açık araç veritabanından çekilir. Bu veritabanında yağ, triger ve lastik bilgisi yok; bunları uygulamada Aracım > Düzenle'den bir kez girersin.
+
+## Özellikler (v1.1)
+
+- Bakım, muayene, sigorta, kasko ve MTV hatırlatma bildirimleri (Ayarlar'dan açılıp kapatılır)
+- Yedek al / yedekten yükle (Ayarlar > Yedekleme): yeni telefona geçerken kullan
+- Belge cüzdanı: ruhsat, poliçe, muayene raporu, fatura fotoğrafları
+- Yakıt takibi: gerçek ortalama tüketim ve km başı maliyet
+- Masraf özeti: aylık grafik ve kategori dağılımı
+- Parça ömrü: lastik, akü, balata, triger, zincir vb.
+- Ana ekrandan tek dokunuşla km güncelleme
+- Servis defteri PDF'i (Bakım sekmesi)
+- Kamerayla km ve plaka okuma (deneysel, internet gerekir)

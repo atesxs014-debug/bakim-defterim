@@ -1,6 +1,6 @@
 {
   "name": "bakim-defterim",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Araç bakım takip uygulaması (Android APK + iOS IPA)",
   "scripts": {
@@ -8,8 +8,14 @@
   },
   "dependencies": {
     "@capacitor/android": "^7.0.0",
+    "@capacitor/camera": "^7.0.0",
     "@capacitor/core": "^7.0.0",
-    "@capacitor/ios": "^7.0.0"
+    "@capacitor/filesystem": "^7.0.0",
+    "@capacitor/ios": "^7.0.0",
+    "@capacitor/local-notifications": "^7.0.0",
+    "@capacitor/preferences": "^7.0.0",
+    "@capacitor/share": "^7.0.0",
+    "tesseract.js": "^5.1.1"
   },
   "devDependencies": {
     "@capacitor/cli": "^7.0.0"

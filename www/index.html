@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#0E1114">
+<script src="vendor/capacitor.js"></script>
 <title>Bakım Defterim</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
@@ -207,6 +208,72 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:.01em;margi
   .w-name span.ch{color:var(--accent)}
 }
 @media (max-width:360px){.checks{grid-template-columns:1fr}}
+/* Detail tabs */
+.tabs{flex:none;display:flex;gap:6px;width:100%;max-width:560px;margin:0 auto;padding-block:0 10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));overflow-x:auto;scrollbar-width:none;touch-action:pan-x}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{appearance:none;flex:1 0 auto;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:99px;padding:8px 12px;font-weight:600;font-size:14px;cursor:pointer;white-space:nowrap}
+.tabs button[aria-selected="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.section.first{margin-top:4px}
+.kmchip{position:absolute;right:8px;bottom:8px;display:inline-flex;align-items:center;gap:5px;border:0;border-radius:99px;padding:6px 10px;background:rgba(10,12,15,.74);color:#fff;font-size:12px;font-weight:600;cursor:pointer}
+.kmchip svg{width:12px;height:12px}
+.kmrow{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:12px}
+.kmrow b{display:block;font-family:var(--f-display);font-size:26px;line-height:1.1}
+.kmrow small{color:var(--muted);font-size:12px}
+.kmrow .btn{min-height:42px;padding:10px 14px;flex:none}
+.dlist{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.drow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.drow:last-child{border-bottom:0}
+.drow>span:first-child{display:flex;flex-direction:column;font-weight:600;min-width:0}
+.drow small{font-weight:400;color:var(--muted);font-size:12.5px}
+.muted{color:var(--muted)}
+.parts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.part{appearance:none;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px;cursor:pointer;min-width:0;color:var(--fg)}
+.part .pt{display:flex;flex-direction:column;gap:2px}
+.part .pt span{font-size:12.5px;color:var(--muted)}
+.part .pt span.warn{color:var(--warn)} .part .pt span.bad{color:var(--bad)}
+.part:last-child:nth-child(odd){grid-column:1/-1}
+.part small{font-size:11.5px;color:var(--muted);line-height:1.3}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.stat b{font-family:var(--f-display);font-size:26px;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat b small{font-size:13px;color:var(--muted);font-family:var(--f-body);font-weight:500;margin-left:3px}
+.total{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.total b{font-family:var(--f-display);font-size:34px;line-height:1;font-variant-numeric:tabular-nums}
+.mchart{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px;height:170px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 8px 10px}
+.mcol{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0;height:100%}
+.mtrack{flex:1;min-height:0;width:100%;display:flex;align-items:flex-end;justify-content:center;background:repeating-linear-gradient(to top,transparent 0,transparent calc(25% - 1px),var(--line) calc(25% - 1px),var(--line) 25%)}
+.mbar{width:100%;max-width:20px;background:var(--accent);border-radius:4px 4px 1px 1px}
+.mbar.top{background:var(--accent-ink)}
+.mcol span{font-size:10px;color:var(--muted)}
+.cats{display:flex;flex-direction:column;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px}
+.cat .ct{display:flex;justify-content:space-between;gap:8px;font-size:14px}
+.cat .ct b{font-variant-numeric:tabular-nums}
+.cat .bar{margin-top:6px}
+.cat .bar i{background:var(--accent)}
+.chipsel{display:flex;gap:6px;flex-wrap:wrap}
+.chipsel button{appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:6px 12px;font-weight:600;cursor:pointer;color:var(--fg)}
+.chipsel button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent-ink);box-shadow:inset 0 0 0 1px var(--accent)}
+.badge{font-size:12px;font-weight:600;padding:3px 8px;border-radius:8px;background:var(--surface2);border:1px solid var(--line);font-variant-numeric:tabular-nums}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap}
+.thumb{appearance:none;border:1px solid var(--line);padding:0;border-radius:10px;overflow:hidden;width:64px;height:64px;background:var(--surface2);cursor:pointer;flex:none}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.thumb.add{display:grid;place-items:center;color:var(--accent-ink);font-size:26px;border-style:dashed}
+.docgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.doc{appearance:none;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:14px;overflow:hidden;padding:0;cursor:pointer;display:flex;flex-direction:column;color:var(--fg);min-width:0}
+.doc .dp{aspect-ratio:4/3;max-width:100%;background:var(--surface2);display:grid;place-items:center}
+.doc .dp img{width:100%;height:100%;object-fit:cover}
+.doc .dm{padding:10px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.doc .dm b{font-size:14px;line-height:1.2;overflow-wrap:anywhere}
+.vimg{width:100%;border-radius:12px;border:1px solid var(--line);display:block;background:var(--surface2)}
+.toggle{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;cursor:pointer}
+.toggle input{accent-color:var(--accent);width:20px;height:20px;flex:none;margin-top:2px}
+.toggle span{display:flex;flex-direction:column;gap:2px}
+.toggle small{color:var(--muted);font-size:13px}
+.label-row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.label-row .link-btn{padding:0;font-size:13px}
+.busy{position:fixed;inset:0;z-index:50;background:rgba(5,7,9,.6);display:grid;place-items:center;padding:24px}
+.busy>div{background:var(--surface);color:var(--fg);border-radius:16px;padding:20px;display:flex;gap:14px;align-items:center;max-width:340px}
+.rec .rh .right{display:flex;gap:6px;align-items:center}
 </style>
 <style>body{margin:0}.field input,.field select,.field textarea{font-size:16px}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
@@ -216,6 +283,8 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:.01em;margi
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-car" viewBox="0 0 120 60"><path fill="currentColor" d="M18 40c0-2 1-4 3-5l10-3 13-11c3-2 6-3 10-3h20c4 0 8 2 11 5l9 9 12 2c3 1 5 3 5 6v6c0 2-1 3-3 3h-6a10 10 0 0 0-20 0H44a10 10 0 0 0-20 0h-3c-2 0-3-1-3-3zm30-11h20V22h-9c-2 0-4 1-5 2zm24 0h18l-6-6c-1-1-3-1-4-1h-8z"/><circle fill="currentColor" cx="34" cy="49" r="7"/><circle fill="currentColor" cx="92" cy="49" r="7"/></symbol>
   <symbol id="i-moto" viewBox="0 0 120 60"><circle cx="24" cy="42" r="12" fill="none" stroke="currentColor" stroke-width="6"/><circle cx="96" cy="42" r="12" fill="none" stroke="currentColor" stroke-width="6"/><path fill="currentColor" d="M36 28h28l10-10h12l-4 7 15 17h-9l-9-9-9 13H52l-6-11H32z"/><path d="M76 10h10l5 9" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16zM14 6l4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></symbol>
   <symbol id="i-back" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7"/></symbol>
   <symbol id="i-cam" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
   <symbol id="i-wrench" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14.5 6.5a4 4 0 0 0 5 5L12 19a2.1 2.1 0 0 1-3-3l7.5-7.5a4 4 0 0 1-2-2z"/></symbol>
@@ -248,7 +317,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:.01em;margi
         </div>
       </div>
       <div class="field">
-        <label class="label" for="fPlate">Plaka</label>
+        <div class="label-row"><label class="label" for="fPlate">Plaka</label><button type="button" class="link-btn" id="plateOcr">Kameradan oku</button></div>
         <input id="fPlate" placeholder="48 ABC 123" maxlength="12" autocapitalize="characters" style="text-transform:uppercase;letter-spacing:.06em">
       </div>
       <div class="plate-preview"><div class="plate lg" id="platePrev"><span class="tr">TR</span><span class="pn">48 ABC 123</span></div></div>
@@ -296,7 +365,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:.01em;margi
       <div class="who" id="homeWho"></div>
       <h1>Araçlarım</h1>
     </div>
-    <button class="icon-btn" id="editOwner" aria-label="Ad soyad düzenle"><svg><use href="#i-user"/></svg></button>
+    <button class="icon-btn" id="editOwner" aria-label="Ayarlar ve yedekleme"><svg><use href="#i-user"/></svg></button>
   </div></header>
   <div class="wrap grid-wrap"><div class="grid" id="grid"></div></div>
 </section>
@@ -308,9 +377,11 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:.01em;margi
     <div class="grow"><div class="who">Araçlarım</div></div>
     <div id="dPlateTop"></div>
   </div></header>
+  <nav class="tabs" id="dTabs" role="tablist" aria-label="Araç bölümleri"></nav>
   <div class="scroll"><div class="wrap" id="dBody"></div></div>
-  <button class="btn btn-primary fab" id="addRec"><svg width="20" height="20"><use href="#i-wrench"/></svg> Bakım ekle</button>
+  <button class="btn btn-primary fab" id="addRec"><svg width="20" height="20"><use href="#i-plus"/></svg><span id="fabLabel">Bakım ekle</span></button>
   <input type="file" id="photoIn" accept="image/*" hidden>
+  <input type="file" id="fileIn" accept="application/json,.json" hidden>
 </section>
 
 <div class="sheet-bg" id="sheetBg" hidden></div>
@@ -437,10 +508,236 @@ const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36);
 const fmtKm=n=>(n==null||isNaN(n))?"—":Number(n).toLocaleString("tr-TR")+" km";
 const fmtTL=n=>(n==null||n==="")?"":Number(n).toLocaleString("tr-TR")+" ₺";
 const fmtDate=d=>{try{return new Date(d+"T12:00:00").toLocaleDateString("tr-TR",{day:"numeric",month:"long",year:"numeric"})}catch(e){return d}};
-const today=()=>new Date().toISOString().slice(0,10);
+const today=()=>ymd(new Date());
 
-function load(){try{const r=localStorage.getItem(KEY);if(r)S=JSON.parse(r)}catch(e){}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S));return true}catch(e){toast("Kaydedilemedi: telefon hafızası dolu olabilir. Daha küçük bir fotoğraf dene.");return false}}
+/* ===== Platform, storage and photos ===== */
+const CAPX=window.Capacitor;
+const NATIVE=!!(CAPX&&CAPX.isNativePlatform&&CAPX.isNativePlatform());
+const _plugs={};
+function plug(n){
+  if(!NATIVE)return null;
+  if(!(n in _plugs)){try{_plugs[n]=CAPX.registerPlugin?CAPX.registerPlugin(n):(CAPX.Plugins||{})[n]||null}catch(e){_plugs[n]=null}}
+  return _plugs[n];
+}
+const ymd=d=>{const x=new Date(d.getTime()-d.getTimezoneOffset()*6e4);return x.toISOString().slice(0,10)};
+let photoBase="";
+function photoSrc(ref){if(!ref)return "";if(ref.startsWith("file:"))return photoBase?photoBase+"/"+ref.slice(5):"";return ref}
+async function initFiles(){
+  const FS=plug("Filesystem");if(!FS)return;
+  try{await FS.mkdir({path:"photos",directory:"DATA",recursive:true})}catch(e){}
+  try{const r=await FS.getUri({path:"photos",directory:"DATA"});photoBase=CAPX.convertFileSrc(r.uri)}catch(e){photoBase=""}
+}
+async function storePhoto(dataUrl){
+  const FS=plug("Filesystem");if(!FS||!photoBase||!dataUrl)return dataUrl;
+  const name=uid()+".jpg";
+  await FS.writeFile({path:"photos/"+name,data:dataUrl.split(",")[1],directory:"DATA",recursive:true});
+  return "file:"+name;
+}
+async function dropPhoto(ref){
+  const FS=plug("Filesystem");
+  if(FS&&ref&&ref.startsWith("file:")){try{await FS.deleteFile({path:"photos/"+ref.slice(5),directory:"DATA"})}catch(e){}}
+}
+async function photoB64(ref){
+  if(!ref)return null;
+  if(ref.startsWith("data:"))return ref.split(",")[1];
+  const FS=plug("Filesystem");if(!FS)return null;
+  try{const r=await FS.readFile({path:"photos/"+ref.slice(5),directory:"DATA"});return typeof r.data==="string"?r.data:null}catch(e){return null}
+}
+function defaults(){
+  S.vehicles=Array.isArray(S.vehicles)?S.vehicles:[];
+  S.settings=Object.assign({notif:true,kmMonthly:true},S.settings||{});
+  S.vehicles.forEach(v=>{v.records=v.records||[];v.type=v.type||"car"});
+}
+async function loadState(){
+  let raw=null;const PR=plug("Preferences");
+  if(PR){try{raw=(await PR.get({key:KEY})).value}catch(e){}}
+  if(!raw){try{raw=localStorage.getItem(KEY)}catch(e){}}
+  if(raw){try{S=JSON.parse(raw)}catch(e){}}
+  defaults();
+  if(photoBase){
+    let changed=false;
+    for(const v of S.vehicles){if(v.photo&&v.photo.startsWith("data:")){try{v.photo=await storePhoto(v.photo);changed=true}catch(e){}}}
+    if(changed)await persist().catch(()=>{});
+  }
+}
+async function persist(){
+  const raw=JSON.stringify(S);const PR=plug("Preferences");
+  if(PR){await PR.set({key:KEY,value:raw});try{localStorage.removeItem(KEY)}catch(e){}return}
+  localStorage.setItem(KEY,raw);
+}
+let _schedT;
+function save(){
+  persist().catch(()=>toast("Kaydedilemedi. Telefon hafızası dolu olabilir."));
+  clearTimeout(_schedT);_schedT=setTimeout(scheduleAll,900);
+  return true;
+}
+
+/* Picking photos: native camera/gallery, file picker in a browser */
+let _pickResolve=null;
+$("#photoIn").addEventListener("change",e=>{
+  const f=e.target.files[0];e.target.value="";const r=_pickResolve;_pickResolve=null;if(!r)return;
+  if(!f){r(null);return}
+  const rd=new FileReader();rd.onload=()=>r(rd.result);rd.onerror=()=>r(null);rd.readAsDataURL(f);
+});
+function resizeImage(src,max,q){
+  return new Promise(res=>{const img=new Image();
+    img.onload=()=>{const sc=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement("canvas");
+      c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext("2d").drawImage(img,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",q))};
+    img.onerror=()=>{toast("Bu dosya açılamadı. JPG veya PNG bir fotoğraf seç.");res(null)};img.src=src});
+}
+async function pickImage(opts={}){
+  let data=null;const CAM=plug("Camera");
+  if(CAM){
+    try{const p=await CAM.getPhoto({quality:88,resultType:"dataUrl",source:opts.camera?"CAMERA":"PROMPT",correctOrientation:true,width:2000,
+      promptLabelHeader:"Fotoğraf",promptLabelPhoto:"Galeriden seç",promptLabelPicture:"Fotoğraf çek",promptLabelCancel:"Vazgeç"});data=p.dataUrl}
+    catch(e){const m=String((e&&e.message)||e).toLowerCase();if(!m.includes("cancel"))toast("Fotoğraf alınamadı. Kamera ve galeri iznini kontrol et.");return null}
+  }else{
+    data=await new Promise(res=>{_pickResolve=res;const i=$("#photoIn");if(opts.camera)i.setAttribute("capture","environment");else i.removeAttribute("capture");i.click()});
+  }
+  if(!data)return null;
+  return resizeImage(data,opts.max||1280,opts.q||.8);
+}
+
+/* Files out: share sheet on the phone, download in a browser */
+function u8b64(u8){let s="";for(let i=0;i<u8.length;i+=0x8000)s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return btoa(s)}
+async function shareFile(name,b64,mime,title){
+  const FS=plug("Filesystem"),SH=plug("Share");
+  if(FS&&SH){
+    const w=await FS.writeFile({path:name,data:b64,directory:"CACHE"});
+    try{await SH.share({title,files:[w.uri],dialogTitle:title})}catch(e){if(!String((e&&e.message)||e).toLowerCase().includes("cancel"))throw e}
+    return;
+  }
+  const bin=atob(b64),u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);
+  const url=URL.createObjectURL(new Blob([u8],{type:mime}));const a=document.createElement("a");a.href=url;a.download=name;
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);
+}
+function showBusy(text){
+  const d=document.createElement("div");d.className="busy";d.setAttribute("role","status");
+  d.innerHTML=`<div><div class="spin"></div><div>${esc(text)}</div></div>`;document.body.appendChild(d);
+  return ()=>d.remove();
+}
+
+/* ===== Backup & restore ===== */
+function allPhotoRefs(){
+  const a=[];S.vehicles.forEach(v=>{if(v.photo)a.push(v.photo);(v.docs||[]).forEach(d=>(d.photos||[]).forEach(p=>a.push(p)));(v.records||[]).forEach(r=>(r.photos||[]).forEach(p=>a.push(p)))});
+  return a;
+}
+async function backup(){
+  const done=showBusy("Yedek hazırlanıyor…");
+  try{
+    const photos={};
+    for(const r of allPhotoRefs()){if(r.startsWith("file:")){const b=await photoB64(r);if(b)photos[r]=b}}
+    const out=JSON.stringify({app:"bakim-defterim",v:2,created:new Date().toISOString(),data:S,photos});
+    done();
+    await shareFile(`BakimDefterim-yedek-${today()}.json`,u8b64(new TextEncoder().encode(out)),"application/json","Bakım Defterim yedeği");
+  }catch(e){done();toast("Yedek alınamadı. Tekrar dene.")}
+}
+$("#fileIn").addEventListener("change",e=>{
+  const f=e.target.files[0];e.target.value="";if(!f)return;
+  const rd=new FileReader();
+  rd.onload=()=>{
+    let j=null;try{j=JSON.parse(rd.result)}catch(err){}
+    if(!j||j.app!=="bakim-defterim"||!j.data||!Array.isArray(j.data.vehicles)){toast("Bu dosya bir Bakım Defterim yedeği değil.");return}
+    const n=j.data.vehicles.length,when=j.created?new Date(j.created).toLocaleDateString("tr-TR",{day:"numeric",month:"long",year:"numeric"}):"";
+    openSheet(`<h3>Yedekten yükle</h3>
+      <p style="margin:0">${esc(when)} tarihli yedekte <b>${n} araç</b> var. Yüklersen bu telefondaki mevcut kayıtların yerini alır.</p>
+      <div class="sheet-actions"><button class="btn btn-ghost" data-close>Vazgeç</button><button class="btn btn-primary" id="rsGo">Yükle</button></div>`);
+    $("#rsGo").onclick=async()=>{
+      $("#rsGo").disabled=true;const done=showBusy("Yedek yükleniyor…");
+      try{
+        const map={};
+        for(const [ref,b64] of Object.entries(j.photos||{})){try{map[ref]=await storePhoto("data:image/jpeg;base64,"+b64)}catch(err){}}
+        const fix=r=>r&&r.startsWith("file:")?(map[r]||null):r;
+        j.data.vehicles.forEach(v=>{v.photo=fix(v.photo);(v.docs||[]).forEach(d=>d.photos=(d.photos||[]).map(fix).filter(Boolean));(v.records||[]).forEach(r=>{if(r.photos)r.photos=r.photos.map(fix).filter(Boolean)})});
+        S=j.data;defaults();await persist();scheduleAll();
+        done();closeSheet();
+        if(S.owner&&S.vehicles.length){renderHome();show("home")}else openOnb(!!S.owner);
+        toast("Yedek yüklendi");
+      }catch(err){done();toast("Yedek yüklenemedi. Dosyayı kontrol edip tekrar dene.")}
+    };
+  };
+  rd.readAsText(f);
+});
+
+/* ===== Reminders (local notifications) ===== */
+const DATE_LABELS={muayene:"Muayene",sigorta:"Trafik sigortası",kasko:"Kasko",mtv:"MTV ödemesi"};
+function nid(s){let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))|0;return Math.abs(h)%2000000000+1}
+function at10(dateStr,off){const d=new Date(dateStr+"T10:00:00");d.setDate(d.getDate()+off);return d}
+async function ensureNotifPerm(){
+  const LN=plug("LocalNotifications");if(!LN)return false;
+  try{let p=await LN.checkPermissions();if(p.display!=="granted")p=await LN.requestPermissions();return p.display==="granted"}catch(e){return false}
+}
+async function scheduleAll(){
+  const LN=plug("LocalNotifications");if(!LN)return;
+  try{
+    const pend=await LN.getPending();
+    if(pend&&pend.notifications&&pend.notifications.length)await LN.cancel({notifications:pend.notifications.map(n=>({id:n.id}))});
+    if(!S.vehicles.length||(!S.settings.notif&&!S.settings.kmMonthly))return;
+    if(!(await ensureNotifPerm()))return;
+    const now=Date.now()+60000,list=[];
+    const add=(key,title,body,date)=>{if(date&&date.getTime()>now)list.push({id:nid(key),title,body,schedule:{at:date,allowWhileIdle:true}})};
+    if(S.settings.notif)S.vehicles.forEach(v=>{
+      const name=`${v.plate} · ${v.brand} ${v.model}`,st=status(v);
+      if(!st.none){
+        const due=ymd(st.dueDate);
+        add(v.id+"b30","Bakım yaklaşıyor",`${name}: periyodik bakıma 30 gün kaldı.`,at10(due,-30));
+        add(v.id+"b0","Bakım zamanı geldi",`${name}: periyodik bakım günü bugün.`,at10(due,0));
+        if(st.kmLeft>0&&st.kmLeft<=1000){const t=new Date();t.setDate(t.getDate()+1);t.setHours(10,0,0,0);add(v.id+"bkm","Bakıma az kaldı",`${name}: bakıma ${fmtKm(st.kmLeft)} kaldı.`,t)}
+      }
+      Object.entries(v.dates||{}).forEach(([k,d])=>{if(!d||!DATE_LABELS[k])return;const L=DATE_LABELS[k];
+        add(v.id+k+"15",`${L} yaklaşıyor`,`${name}: ${L.toLowerCase()} için 15 gün kaldı (${fmtDate(d)}).`,at10(d,-15));
+        add(v.id+k+"1",`${L} yarın`,`${name}: ${L.toLowerCase()} için son gün yarın.`,at10(d,-1))});
+    });
+    list.sort((a,b)=>a.schedule.at-b.schedule.at);
+    const out=list.slice(0,58);
+    if(S.settings.kmMonthly)out.push({id:nid("kmMonthly"),title:"Kilometreni güncelle",body:"Bakım hatırlatmalarının doğru çalışması için araçlarının güncel km'sini gir.",schedule:{on:{day:1,hour:11,minute:0},allowWhileIdle:true}});
+    if(out.length)await LN.schedule({notifications:out});
+  }catch(e){console.warn("notif",e)}
+}
+
+/* ===== Reading numbers from photos (on-device OCR) ===== */
+let _tess=null;
+function loadTesseract(){
+  if(window.Tesseract)return Promise.resolve(window.Tesseract);
+  if(_tess)return _tess;
+  _tess=new Promise((res,rej)=>{const s=document.createElement("script");s.src="vendor/tesseract.min.js";
+    s.onload=()=>window.Tesseract?res(window.Tesseract):rej(new Error("x"));s.onerror=()=>{_tess=null;rej(new Error("load"))};document.head.appendChild(s)});
+  return _tess;
+}
+function preprocess(src){
+  return new Promise(res=>{const img=new Image();img.onload=()=>{
+    const sc=Math.min(2,1800/Math.max(img.width,img.height));const c=document.createElement("canvas");c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);
+    const x=c.getContext("2d");x.drawImage(img,0,0,c.width,c.height);const d=x.getImageData(0,0,c.width,c.height),p=d.data;
+    let mn=255,mx=0;for(let i=0;i<p.length;i+=4){const g=.299*p[i]+.587*p[i+1]+.114*p[i+2];p[i]=g;if(g<mn)mn=g;if(g>mx)mx=g}
+    const k=255/Math.max(1,mx-mn);for(let i=0;i<p.length;i+=4){const g=(p[i]-mn)*k;p[i]=p[i+1]=p[i+2]=g}
+    x.putImageData(d,0,0);res(c.toDataURL("image/png"))};img.onerror=()=>res(src);img.src=src});
+}
+async function ocrImage(whitelist){
+  const img=await pickImage({camera:true,max:1800,q:.92});if(!img)return null;
+  const done=showBusy("Fotoğraf okunuyor… İlk kullanımda okuma modülü indirilir, internet gerekir.");
+  let w=null;
+  try{
+    const T=await loadTesseract();w=await T.createWorker("eng");
+    await w.setParameters({tessedit_char_whitelist:whitelist,tessedit_pageseg_mode:"11"});
+    const pre=await preprocess(img);const r=await w.recognize(pre);return (r&&r.data&&r.data.text)||"";
+  }catch(e){toast(navigator.onLine===false?"Okuma için internet bağlantısı gerekli.":"Fotoğraf okunamadı. Daha yakından ve net çekip tekrar dene.");return null}
+  finally{try{w&&await w.terminate()}catch(e){}done()}
+}
+async function ocrKm(v){
+  const t=await ocrImage("0123456789");if(t==null)return null;
+  const nums=(t.match(/\d{3,7}/g)||[]).map(Number);
+  if(!nums.length){toast("Kilometre okunamadı. Göstergeye yakından ve parlamasız çek.");return null}
+  const cur=curKmOf(v),ok=nums.filter(n=>!cur||n>=cur*0.9);
+  return (ok.length?ok:nums).sort((a,b)=>String(b).length-String(a).length||b-a)[0];
+}
+async function ocrPlate(){
+  const t=await ocrImage("ABCDEFGHIJKLMNOPRSTUVYZ0123456789 ");if(t==null)return null;
+  const up=t.toUpperCase().replace(/[^A-Z0-9\n ]/g," ");
+  const rx=/(0[1-9]|[1-7]\d|8[01])\s?([A-Z]{1,3})\s?(\d{2,5})/;
+  for(const line of up.split("\n")){const m=line.replace(/\s+/g," ").match(rx)||line.replace(/\s/g,"").match(rx);if(m)return `${m[1]} ${m[2]} ${m[3]}`}
+  toast("Plaka okunamadı. Plakaya düz ve yakından çekip tekrar dene.");return null;
+}
+
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove("show"),2600)}
 
 function show(id){["onb","welcome","home","detail"].forEach(s=>$("#"+s).hidden=s!==id);document.querySelectorAll(".scroll,.grid-wrap").forEach(e=>e.scrollTop=0)}
@@ -458,7 +755,7 @@ function status(v){
   const recs=(v.records||[]).slice().sort((a,b)=>b.date.localeCompare(a.date));
   if(!recs.length)return {cls:"",text:"Kayıt yok",none:true};
   const last=recs[0], interval=Number(v.interval)||(v.type==="moto"?5000:10000);
-  const curKm=Math.max(Number(v.km)||0,...recs.map(r=>Number(r.km)||0));
+  const curKm=curKmOf(v);
   const dueKm=(Number(last.km)||0)+interval;
   const dueDate=new Date(last.date+"T12:00:00");dueDate.setFullYear(dueDate.getFullYear()+1);
   const daysLeft=Math.round((dueDate-new Date())/864e5);
@@ -550,86 +847,490 @@ function welcome(v){
 function goHome(){clearTimeout(welcome._t);renderHome();show("home")}
 $("#wGo").onclick=goHome;
 
-/* --- Home --- */
+/* ===== Shared helpers ===== */
+const curKmOf=v=>Math.max(Number(v.km)||0,...(v.records||[]).map(r=>Number(r.km)||0),...(v.fuelLogs||[]).map(r=>Number(r.km)||0));
+const daysTo=d=>Math.round((new Date(d+"T12:00:00")-new Date(today()+"T12:00:00"))/864e5);
+const MONTHS=["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara"];
+const dec=(n,d=1)=>Number(n).toLocaleString("tr-TR",{minimumFractionDigits:d,maximumFractionDigits:d});
+const shortDate=d=>{try{return new Date(d+"T12:00:00").toLocaleDateString("tr-TR",{day:"numeric",month:"short",year:"numeric"})}catch(e){return d}};
+const sel=(id,opts,val)=>`<select id="${id}"><option value="">Seç</option>${opts.map(o=>`<option ${o===val?"selected":""}>${esc(o)}</option>`).join("")}</select>`;
+const EXP_CATS=["Trafik sigortası","Kasko","MTV","Muayene","Lastik","Otopark / Köprü / Otoyol","Yıkama","Ceza","Aksesuar","Diğer"];
+const EXP_DATE={"Trafik sigortası":["sigorta",12],"Kasko":["kasko",12],"Muayene":["muayene",24],"MTV":["mtv",6]};
+const DOC_TYPES=["Ruhsat","Trafik sigortası poliçesi","Kasko poliçesi","Muayene raporu","Fatura","Ehliyet","Garanti belgesi","Diğer"];
+const DOC_DATE={"Trafik sigortası poliçesi":"sigorta","Kasko poliçesi":"kasko","Muayene raporu":"muayene"};
+function addMonths(d,m){const x=new Date(d+"T12:00:00");x.setMonth(x.getMonth()+m);return ymd(x)}
+function allCosts(v){
+  return [...(v.records||[]).filter(r=>Number(r.cost)>0).map(r=>({date:r.date,cat:"Bakım",amount:Number(r.cost)})),
+    ...(v.fuelLogs||[]).filter(f=>Number(f.cost)>0).map(f=>({date:f.date,cat:"Yakıt",amount:Number(f.cost)})),
+    ...(v.expenses||[]).filter(e=>Number(e.amount)>0).map(e=>({date:e.date,cat:e.cat,amount:Number(e.amount)}))];
+}
+function thumbsHTML(refs,key){return (refs||[]).map((p,i)=>`<button class="thumb" data-${key}="${i}"><img src="${photoSrc(p)}" alt="Fotoğraf ${i+1}"></button>`).join("")}
+function viewer(title,refs){
+  openSheet(`<h3>${esc(title)}</h3>${refs.map(p=>`<img class="vimg" src="${photoSrc(p)}" alt="">`).join("")}
+    <div class="sheet-actions"><button class="btn btn-ghost" data-close>Kapat</button></div>`);
+}
+async function changePhoto(v){
+  const img=await pickImage({max:1280});if(!img)return;
+  const old=v.photo;
+  try{v.photo=await storePhoto(img)}catch(e){toast("Fotoğraf kaydedilemedi.");return}
+  save();dropPhoto(old);renderDetail();toast("Fotoğraf kaydedildi");
+}
+
+/* ===== Home ===== */
 function renderHome(){
   $("#homeWho").textContent=S.owner?S.owner.name:"";
   const g=$("#grid");
   g.innerHTML=S.vehicles.map(v=>{
-    const st=status(v);
-    return `<button class="vcard" data-id="${v.id}">
-      <div class="ph">${v.photo?`<img src="${v.photo}" alt="">`:carSvg(v)}
-        <span class="pill ${st.cls}"><i></i>${st.text}</span></div>
+    const st=status(v),km=curKmOf(v);
+    return `<div class="vcard" role="button" tabindex="0" data-id="${v.id}">
+      <div class="ph">${v.photo?`<img src="${photoSrc(v.photo)}" alt="">`:carSvg(v)}
+        <span class="pill ${st.cls}"><i></i>${st.text}</span>
+        <button class="kmchip num" data-km="${v.id}" aria-label="Kilometre güncelle">${km?km.toLocaleString("tr-TR")+" km":"Km gir"}<svg><use href="#i-edit"/></svg></button></div>
       <div class="meta">${plateHTML(v.plate,"sm")}<div class="bm">${esc(v.brand)} ${esc(v.model)}</div><div class="yr">${v.year} · ${CUR_YEAR-v.year===0?"sıfır":(CUR_YEAR-v.year)+" yaşında"}</div></div>
-    </button>`}).join("")+
+    </div>`}).join("")+
     `<button class="vcard add" id="addVeh"><div class="plus">+</div><span>Araç ekle</span></button>`;
-  g.querySelectorAll(".vcard[data-id]").forEach(b=>b.onclick=()=>{curId=b.dataset.id;renderDetail();show("detail")});
+  g.querySelectorAll(".vcard[data-id]").forEach(b=>{
+    const open=()=>{curId=b.dataset.id;curTab="genel";renderDetail();show("detail")};
+    b.onclick=open;b.onkeydown=e=>{if(e.target===b&&(e.key==="Enter"||e.key===" ")){e.preventDefault();open()}};
+  });
+  g.querySelectorAll("[data-km]").forEach(b=>b.onclick=e=>{e.stopPropagation();kmSheet(S.vehicles.find(x=>x.id===b.dataset.km),renderHome)});
   $("#addVeh").onclick=()=>openOnb(true);
 }
-$("#editOwner").onclick=()=>{
-  openSheet(`<h3>Araç sahibi</h3>
-    <div class="field"><label class="label" for="oName">Ad Soyad</label><input id="oName" value="${esc(S.owner?.name)}" maxlength="40"></div>
-    <div class="sheet-actions"><button class="btn btn-ghost" data-close>Vazgeç</button><button class="btn btn-primary" id="oSave">Kaydet</button></div>`);
-  $("#oSave").onclick=()=>{const n=$("#oName").value.trim();if(!n)return;S.owner={name:n};save();closeSheet();renderHome();toast("Kaydedildi")};
-};
+$("#editOwner").onclick=settingsSheet;
+function settingsSheet(){
+  openSheet(`<h3>Ayarlar</h3>
+    <div class="field"><label class="label" for="oName">Araç sahibi · Ad Soyad</label><input id="oName" value="${esc(S.owner?.name)}" maxlength="40"></div>
+    <label class="toggle"><input type="checkbox" id="oNotif" ${S.settings.notif?"checked":""}><span><b>Bakım ve tarih hatırlatmaları</b><small>Bakıma 30 gün kala ve bakım günü; muayene, sigorta, kasko ve MTV için 15 gün ve 1 gün kala bildirim.</small></span></label>
+    <label class="toggle"><input type="checkbox" id="oKm" ${S.settings.kmMonthly?"checked":""}><span><b>Aylık km hatırlatması</b><small>Her ayın 1'inde kilometreni güncellemeni hatırlatır.</small></span></label>
+    ${NATIVE?"":`<div class="hint">Bildirimler telefona kurulu uygulamada çalışır.</div>`}
+    <button class="btn btn-primary" id="oSave">Kaydet</button>
+    <div class="section"><div class="section-h"><h3>Yedekleme</h3></div>
+      <div class="hint">Kayıtların sadece bu telefonda duruyor. Telefon değiştirmeden önce yedek al ve yedeği WhatsApp, Drive veya mail ile kendine gönder. Yeni telefonda "Yedekten yükle" ile geri getir.</div>
+      <div class="sheet-actions"><button class="btn btn-ghost" id="oBackup">Yedek al</button><button class="btn btn-ghost" id="oRestore">Yedekten yükle</button></div>
+    </div>`);
+  $("#oSave").onclick=async()=>{
+    const n=$("#oName").value.trim();if(n)S.owner={name:n};
+    const wasOff=!S.settings.notif&&!S.settings.kmMonthly;
+    S.settings.notif=$("#oNotif").checked;S.settings.kmMonthly=$("#oKm").checked;
+    save();closeSheet();renderHome();
+    if(NATIVE&&wasOff&&(S.settings.notif||S.settings.kmMonthly)&&!(await ensureNotifPerm()))toast("Bildirim izni kapalı. Telefon ayarlarından Bakım Defterim'e bildirim izni ver.");
+    else toast("Ayarlar kaydedildi");
+  };
+  $("#oBackup").onclick=backup;
+  $("#oRestore").onclick=()=>$("#fileIn").click();
+}
 
-/* --- Detail --- */
+/* ===== Detail with tabs ===== */
 const cur=()=>S.vehicles.find(v=>v.id===curId);
+let curTab="genel";
+const TABS=[["genel","Genel"],["bakim","Bakım"],["yakit","Yakıt"],["masraf","Masraf"],["belge","Belgeler"]];
 function renderDetail(){
-  const moto=(cur()||{}).type==="moto";
   const v=cur();if(!v){goHome();return}
-  const st=status(v);
   $("#dPlateTop").innerHTML=plateHTML(v.plate,"sm");
-  const recs=(v.records||[]).slice().sort((a,b)=>b.date.localeCompare(a.date));
-  const totalCost=recs.reduce((s,r)=>s+(Number(r.cost)||0),0);
-  let next;
-  if(st.none){next=`<div class="next"><div class="head"><span class="label">Sonraki bakım</span><span class="pill"><i></i>Kayıt yok</span></div><div style="color:var(--muted)">İlk bakım kaydını ekle, bir sonraki bakımın ne zaman geleceğini burada göster.</div></div>`}
-  else{
-    const kc=st.kmLeft<=0?"bad":st.kmLeft<=1500?"warn":"", dc=st.daysLeft<=0?"bad":st.daysLeft<=30?"warn":"";
-    next=`<div class="next ${st.cls==="ok"?"":st.cls}">
-      <div class="head"><span class="label">Sonraki periyodik bakım</span><span class="pill ${st.cls}"><i></i>${st.text}</span></div>
-      <div class="meter"><div class="top"><span>Kilometre</span><b class="num">${st.kmLeft>0?fmtKm(st.kmLeft)+" kaldı":fmtKm(-st.kmLeft)+" geçti"}</b></div>
-        <div class="bar"><i class="${kc}" style="width:${st.kmPct}%"></i></div>
-        <div class="top"><span class="num">${fmtKm(st.last.km)}</span><span class="num">Hedef ${fmtKm(st.dueKm)}</span></div></div>
-      <div class="meter"><div class="top"><span>Süre (1 yıl)</span><b class="num">${st.daysLeft>0?st.daysLeft+" gün kaldı":(-st.daysLeft)+" gün geçti"}</b></div>
-        <div class="bar"><i class="${dc}" style="width:${st.dayPct}%"></i></div>
-        <div class="top"><span>${fmtDate(st.last.date)}</span><span>${st.dueDate.toLocaleDateString("tr-TR",{day:"numeric",month:"short",year:"numeric"})}</span></div></div>
-    </div>`;
-  }
-  const sp=(l,val)=>`<div class="spec"><span class="label">${l}</span><span class="v num">${val||'<span style="color:var(--muted);font-weight:400">Eklenmedi</span>'}</span></div>`;
+  $("#dTabs").innerHTML=TABS.map(([k,l])=>`<button role="tab" aria-selected="${k===curTab}" data-tab="${k}">${l}</button>`).join("");
+  $("#dTabs").querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{curTab=b.dataset.tab;renderDetail();$("#detail .scroll").scrollTop=0});
+  $("#fabLabel").textContent={genel:"Bakım ekle",bakim:"Bakım ekle",yakit:"Yakıt ekle",masraf:"Masraf ekle",belge:"Belge ekle"}[curTab];
+  ({genel:tabGenel,bakim:tabBakim,yakit:tabYakit,masraf:tabMasraf,belge:tabBelge})[curTab](v);
+}
+$("#addRec").onclick=()=>{const v=cur();({genel:recSheet,bakim:recSheet,yakit:fuelSheet,masraf:expSheet,belge:docSheet})[curTab](v)};
+
+/* --- Genel --- */
+function nextHTML(v){
+  const st=status(v);
+  if(st.none)return `<div class="next"><div class="head"><span class="label">Sonraki bakım</span><span class="pill"><i></i>Kayıt yok</span></div><div class="muted">İlk bakım kaydını ekle, bir sonraki bakımın ne zaman geleceği burada görünsün.</div></div>`;
+  const kc=st.kmLeft<=0?"bad":st.kmLeft<=1500?"warn":"",dc=st.daysLeft<=0?"bad":st.daysLeft<=30?"warn":"";
+  return `<div class="next ${st.cls==="ok"?"":st.cls}">
+    <div class="head"><span class="label">Sonraki periyodik bakım</span><span class="pill ${st.cls}"><i></i>${st.text}</span></div>
+    <div class="meter"><div class="top"><span>Kilometre</span><b class="num">${st.kmLeft>0?fmtKm(st.kmLeft)+" kaldı":fmtKm(-st.kmLeft)+" geçti"}</b></div>
+      <div class="bar"><i class="${kc}" style="width:${st.kmPct}%"></i></div>
+      <div class="top"><span class="num">${fmtKm(st.last.km)}</span><span class="num">Hedef ${fmtKm(st.dueKm)}</span></div></div>
+    <div class="meter"><div class="top"><span>Süre (1 yıl)</span><b class="num">${st.daysLeft>0?st.daysLeft+" gün kaldı":(-st.daysLeft)+" gün geçti"}</b></div>
+      <div class="bar"><i class="${dc}" style="width:${st.dayPct}%"></i></div>
+      <div class="top"><span>${shortDate(st.last.date)}</span><span>${shortDate(ymd(st.dueDate))}</span></div></div>
+  </div>`;
+}
+function datesHTML(v){
+  return Object.keys(DATE_LABELS).map(k=>{const d=(v.dates||{})[k];
+    if(!d)return `<div class="drow"><span>${DATE_LABELS[k]}</span><span class="muted">Girilmedi</span></div>`;
+    const n=daysTo(d),c=n<0?"bad":n<=30?"warn":"ok";
+    return `<div class="drow"><span>${DATE_LABELS[k]}<small>${fmtDate(d)}</small></span><span class="pill ${c}"><i></i>${n<0?(-n)+" gün geçti":n===0?"Bugün":n+" gün"}</span></div>`}).join("");
+}
+function partDefs(v){
+  const moto=v.type==="moto",o=v.partLife||{};
+  const d=moto?[["lastik","Lastikler","Lastik değişimi",15000,4],["aku","Akü","Akü",null,3],["balata","Fren balatası","Fren balatası",15000,null],
+      v.timing==="Kayış"?["kayis","CVT kayışı","CVT kayışı",Number(v.timingKm)||20000,null]:["zincir","Zincir-dişli seti","Zincir-dişli seti",Number(v.timingKm)||20000,null],
+      ["buji","Buji","Buji",10000,2],["hidrolik","Fren hidroliği","Fren hidroliği",null,2]]
+    :[["lastik","Lastikler","Lastik değişimi",40000,4],["aku","Akü","Akü",null,4],["balata","Fren balatası","Fren balatası",30000,null],
+      ["hava","Hava filtresi","Hava filtresi",15000,1],["antifriz","Antifriz","Antifriz",null,2],["hidrolik","Fren hidroliği","Fren hidroliği",null,2]];
+  if(!moto&&v.timing!=="Zincir"&&v.fuel!=="Elektrik")d.splice(3,0,["triger","Triger seti","Triger seti",Number(v.timingKm)||90000,5]);
+  return d.map(([key,name,item,km,yr])=>({key,name,item,km:o[key]&&o[key].km!==undefined?o[key].km:km,yr:o[key]&&o[key].yr!==undefined?o[key].yr:yr}));
+}
+function partState(v,p){
+  const last=(v.records||[]).filter(r=>(r.items||[]).includes(p.item)).sort((a,b)=>b.date.localeCompare(a.date))[0];
+  if(!last)return {none:true};
+  const usedKm=Math.max(0,curKmOf(v)-(Number(last.km)||0)),days=Math.max(0,-daysTo(last.date));
+  const pct=Math.max(p.km?usedKm/p.km:0,p.yr?days/(p.yr*365):0);
+  const left=[];
+  if(p.km)left.push(p.km-usedKm>0?fmtKm(p.km-usedKm)+" kaldı":fmtKm(usedKm-p.km)+" geçti");
+  if(p.yr){const dl=Math.round(p.yr*365-days);left.push(dl>0?(dl>60?Math.round(dl/30)+" ay":dl+" gün")+" kaldı":"süresi doldu")}
+  return {last,pct,cls:pct>=1?"bad":pct>=.85?"warn":"",text:left.join(" · ")||"Ömür girilmedi"};
+}
+function partsHTML(v){
+  return partDefs(v).map(p=>{const s=partState(v,p);
+    return `<button class="part" data-part="${p.key}"><div class="pt"><b>${p.name}</b><span class="${s.cls||""}">${s.none?"Değişim kaydı yok":s.text}</span></div>
+      <div class="bar"><i class="${s.cls||""}" style="width:${s.none?0:Math.min(100,Math.round(s.pct*100))}%"></i></div>
+      <small>${s.none?"Dokun: ömrünü ayarla veya değişimi kaydet":"Son değişim "+shortDate(s.last.date)+" · "+fmtKm(s.last.km)}</small></button>`}).join("");
+}
+function tabGenel(v){
+  const moto=v.type==="moto",km=curKmOf(v),recs=v.records||[],total=allCosts(v).reduce((s,c)=>s+c.amount,0);
+  const sp=(l,val)=>`<div class="spec"><span class="label">${l}</span><span class="v num">${val||'<span class="muted" style="font-weight:400">Eklenmedi</span>'}</span></div>`;
   $("#dBody").innerHTML=`
-    <div class="hero">${v.photo?`<img src="${v.photo}" alt="${esc(v.brand+" "+v.model)}">`:carSvg(v)}
+    <div class="hero">${v.photo?`<img src="${photoSrc(v.photo)}" alt="${esc(v.brand+" "+v.model)}">`:carSvg(v)}
       <button class="photo-btn" id="photoBtn"><svg><use href="#i-cam"/></svg>${v.photo?"Fotoğrafı değiştir":"Fotoğraf ekle"}</button></div>
     <div class="d-title"><h2>${esc(v.brand)} ${esc(v.model)}</h2>
       <div class="sub">${v.year} model · ${CUR_YEAR-v.year===0?"sıfır km":(CUR_YEAR-v.year)+" yaşında"} · Sahibi ${esc(S.owner?.name||"")}</div></div>
-    ${next}
+    <div class="kmrow"><div><span class="label">Güncel kilometre</span><b class="num">${km?fmtKm(km):"Girilmedi"}</b>${v.kmDate?`<small>${fmtDate(v.kmDate)} itibarıyla</small>`:""}</div>
+      <button class="btn btn-ghost" id="kmBtn">Km güncelle</button></div>
+    ${nextHTML(v)}
+    <div class="section"><div class="section-h"><h3>Önemli tarihler</h3><button class="link-btn" id="editDates">Düzenle</button></div><div class="dlist">${datesHTML(v)}</div></div>
+    <div class="section"><div class="section-h"><h3>Parça ömrü</h3></div><div class="parts">${partsHTML(v)}</div>
+      <div class="hint">Süreler genel önerilerdir. Parçaya dokunup kendi aracına göre değiştirebilirsin.</div></div>
     <div class="section"><div class="section-h"><h3>Aracım</h3><button class="link-btn" id="editTech">Düzenle</button></div>
       <div class="specs">
-        ${sp("Güncel km",v.km||st.curKm?fmtKm(Math.max(Number(v.km)||0,st.curKm||0)):"")}
-        ${sp("Bakım aralığı",fmtKm(v.interval||(moto?5000:10000)))}
+        ${sp("Güncel km",km?fmtKm(km):"")}${sp("Bakım aralığı",fmtKm(v.interval||(moto?5000:10000)))}
         ${sp("Yakıt",esc(v.fuel))}${sp(moto?"Şanzıman":"Vites",esc(v.gear))}
         ${sp(moto?"Motor hacmi":"Motor",esc(v.engine))}${moto?sp("Güç",v.power?esc(v.power)+" HP":""):sp("Renk",esc(v.color))}
         ${moto?sp("Soğutma",esc(v.cooling))+sp("Renk",esc(v.color)):""}
         ${sp("Motor yağı",esc(v.oil))}${sp("Yağ kapasitesi",v.oilCap?esc(v.oilCap)+" L":"")}
         ${sp(moto?"Son aktarma":"Triger",esc(v.timing))}${sp(moto?"Zincir/kayış değişimi":"Triger değişimi",v.timingKm?fmtKm(v.timingKm):"")}
         ${sp(moto?"Lastik (ön / arka)":"Lastik ölçüsü",esc(v.tire))}${sp("Akü",esc(v.battery))}
-        ${sp("Toplam bakım",recs.length?recs.length+" kayıt":"")}${sp("Toplam masraf",totalCost?fmtTL(totalCost):"")}
+        ${sp("Toplam bakım",recs.length?recs.length+" kayıt":"")}${sp("Toplam masraf",total?fmtTL(Math.round(total)):"")}
       </div></div>
     ${moto?"":`<div class="section" id="specSec">${specsHTML(v)}</div>`}
-    <div class="section"><div class="section-h"><h3>Bakım geçmişi</h3></div>
-      <div class="timeline">${recs.length?recs.map(r=>`
-        <article class="rec"><div class="rh"><span class="date">${fmtDate(r.date)}</span><span class="km num">${fmtKm(r.km)}</span></div>
-          ${r.items?.length?`<div class="chips">${r.items.map(x=>`<span class="chip">${esc(x)}</span>`).join("")}</div>`:""}
-          ${r.note?`<p class="note">${esc(r.note)}</p>`:""}
-          <div class="foot"><span>${esc(r.shop||"")}${r.shop&&r.cost?" · ":""}<b class="num" style="color:var(--fg)">${fmtTL(r.cost)}</b></span><button class="del" data-rid="${r.id}">Sil</button></div>
-        </article>`).join(""):`<div class="empty">Henüz bakım kaydı yok. Aşağıdaki <b>Bakım ekle</b> ile ilkini gir.</div>`}</div></div>
     <div class="section"><button class="btn btn-danger" id="delVeh">Bu aracı sil</button></div>`;
-  $("#photoBtn").onclick=()=>$("#photoIn").click();
+  $("#photoBtn").onclick=()=>changePhoto(v);
+  $("#kmBtn").onclick=()=>kmSheet(v);
+  $("#editDates").onclick=()=>datesSheet(v);
   $("#editTech").onclick=techSheet;
+  document.querySelectorAll("[data-part]").forEach(b=>b.onclick=()=>partSheet(v,b.dataset.part));
   wireSpecs(v);
   if(!moto&&!v.variants&&!v.specTried&&!specJob)fetchSpecs(v,false);
-  armButton($("#delVeh"),"Emin misin? Araç ve tüm kayıtları silinecek",()=>{S.vehicles=S.vehicles.filter(x=>x.id!==v.id);save();goHome();toast("Araç silindi")});
-  document.querySelectorAll(".rec .del").forEach(b=>armButton(b,"Silmek için tekrar dokun",()=>{v.records=v.records.filter(r=>r.id!==b.dataset.rid);save();renderDetail();toast("Kayıt silindi")}));
+  armButton($("#delVeh"),"Emin misin? Araç ve tüm kayıtları silinecek",()=>{
+    const refs=[v.photo,...(v.docs||[]).flatMap(d=>d.photos||[]),...(v.records||[]).flatMap(r=>r.photos||[])];
+    S.vehicles=S.vehicles.filter(x=>x.id!==v.id);save();refs.forEach(dropPhoto);goHome();toast("Araç silindi")});
 }
+function kmSheet(v,after){
+  const km=curKmOf(v);
+  openSheet(`<h3>Km güncelle</h3><div class="hint">${esc(v.plate)} · ${esc(v.brand)} ${esc(v.model)}</div>
+    <div class="field"><label class="label" for="kmIn">Güncel kilometre</label><input type="number" inputmode="numeric" id="kmIn" placeholder="${km||"85000"}"></div>
+    <button class="btn btn-ghost" id="kmOcr"><svg width="18" height="18"><use href="#i-cam"/></svg>Göstergeden oku (kamera)</button>
+    <div class="hint" id="kmHint">${km?"Son kayıtlı: "+fmtKm(km):""}</div>
+    <div class="err" id="kmErr" role="alert"></div>
+    <div class="sheet-actions"><button class="btn btn-ghost" data-close>Vazgeç</button><button class="btn btn-primary" id="kmSave">Kaydet</button></div>`);
+  $("#kmOcr").onclick=async()=>{const r=await ocrKm(v);if(r){$("#kmIn").value=r;$("#kmHint").textContent=`Okunan değer: ${fmtKm(r)}. Doğruysa Kaydet'e bas, değilse düzelt.`}};
+  $("#kmSave").onclick=()=>{
+    const n=Number($("#kmIn").value);
+    if(!n){$("#kmErr").textContent="Kilometreyi yaz.";return}
+    if(km&&n<km&&!$("#kmSave").dataset.ok){$("#kmErr").textContent=`Bu değer son kayıttan (${fmtKm(km)}) düşük. Yine de kaydetmek için tekrar Kaydet'e bas.`;$("#kmSave").dataset.ok="1";return}
+    v.km=n;v.kmDate=today();save();closeSheet();(after||renderDetail)();toast("Kilometre güncellendi");
+  };
+}
+function datesSheet(v){
+  const d=v.dates||{};
+  openSheet(`<h3>Önemli tarihler</h3><div class="hint">Bitiş veya son ödeme tarihlerini gir. Hatırlatma 15 gün ve 1 gün önce gelir. MTV ocak ve temmuz aylarında ödenir.</div>
+    ${Object.entries(DATE_LABELS).map(([k,l])=>`<div class="field"><label class="label" for="dt_${k}">${l}</label><input type="date" id="dt_${k}" value="${d[k]||""}"></div>`).join("")}
+    <div class="sheet-actions"><button class="btn btn-ghost" data-close>Vazgeç</button><button class="btn btn-primary" id="dtSave">Kaydet</button></div>`);
+  $("#dtSave").onclick=()=>{v.dates={};Object.keys(DATE_LABELS).forEach(k=>{const x=$("#dt_"+k).value;if(x)v.dates[k]=x});save();closeSheet();renderDetail();toast("Tarihler kaydedildi")};
+}
+function partSheet(v,key){
+  const p=partDefs(v).find(x=>x.key===key);if(!p)return;
+  openSheet(`<h3>${p.name}</h3>
+    <div class="row2"><div class="field"><label class="label" for="plKm">Ömür (km)</label><input type="number" inputmode="numeric" id="plKm" value="${p.km??""}" placeholder="Yok"></div>
+      <div class="field"><label class="label" for="plYr">Ömür (yıl)</label><input type="number" inputmode="decimal" id="plYr" value="${p.yr??""}" placeholder="Yok"></div></div>
+    <div class="hint">Boş bıraktığın ölçüt hesaba katılmaz. "Bugün değiştirildi" güncel km ile bir bakım kaydı ekler.</div>
+    <div class="sheet-actions"><button class="btn btn-ghost" id="plDone">Bugün değiştirildi</button><button class="btn btn-primary" id="plSave">Kaydet</button></div>`);
+  const store=()=>{v.partLife=v.partLife||{};v.partLife[key]={km:$("#plKm").value?Number($("#plKm").value):null,yr:$("#plYr").value?Number($("#plYr").value):null}};
+  $("#plSave").onclick=()=>{store();save();closeSheet();renderDetail();toast("Kaydedildi")};
+  $("#plDone").onclick=()=>{store();v.records.push({id:uid(),date:today(),km:curKmOf(v),items:[p.item],cost:"",shop:"",note:""});save();closeSheet();renderDetail();toast(`${p.name} değişimi kaydedildi`)};
+}
+
+/* --- Bakım --- */
+function tabBakim(v){
+  const recs=(v.records||[]).slice().sort((a,b)=>b.date.localeCompare(a.date)||b.km-a.km);
+  $("#dBody").innerHTML=`<div class="section first"><div class="section-h"><h3>Bakım geçmişi</h3>${recs.length?`<button class="link-btn" id="pdfBtn">Servis defteri (PDF)</button>`:""}</div>
+    <div class="timeline">${recs.length?recs.map(r=>`
+      <article class="rec"><div class="rh"><span class="date">${fmtDate(r.date)}</span><span class="km num">${fmtKm(r.km)}</span></div>
+        ${r.items?.length?`<div class="chips">${r.items.map(x=>`<span class="chip">${esc(x)}</span>`).join("")}</div>`:""}
+        ${r.note?`<p class="note">${esc(r.note)}</p>`:""}
+        ${r.photos?.length?`<div class="thumbs" data-rec="${r.id}">${thumbsHTML(r.photos,"ph")}</div>`:""}
+        <div class="foot"><span>${esc(r.shop||"")}${r.shop&&r.cost?" · ":""}<b class="num" style="color:var(--fg)">${fmtTL(r.cost)}</b></span><button class="del" data-rid="${r.id}">Sil</button></div>
+      </article>`).join(""):`<div class="empty">Henüz bakım kaydı yok. Aşağıdaki <b>Bakım ekle</b> ile ilkini gir.</div>`}</div></div>`;
+  const pb=$("#pdfBtn");if(pb)pb.onclick=()=>servicePdf(v);
+  document.querySelectorAll(".thumbs[data-rec]").forEach(t=>{const r=v.records.find(x=>x.id===t.dataset.rec);t.querySelectorAll(".thumb").forEach(b=>b.onclick=()=>viewer("Fatura · "+fmtDate(r.date),r.photos))});
+  document.querySelectorAll(".rec .del").forEach(b=>armButton(b,"Silmek için tekrar dokun",()=>{
+    const r=v.records.find(x=>x.id===b.dataset.rid);v.records=v.records.filter(x=>x.id!==b.dataset.rid);save();(r&&r.photos||[]).forEach(dropPhoto);renderDetail();toast("Kayıt silindi")}));
+}
+function recSheet(v){
+  const st=status(v),pending=[];
+  openSheet(`<h3>Bakım ekle</h3>
+    <div class="row2">
+      <div class="field"><label class="label" for="rDate">Tarih</label><input type="date" id="rDate" value="${today()}" max="${today()}"></div>
+      <div class="field"><label class="label" for="rKm">Kilometre</label><input type="number" inputmode="numeric" id="rKm" placeholder="${st.curKm||curKmOf(v)||"85000"}" min="0"></div>
+    </div>
+    <div class="field"><span class="label">Neler yapıldı?</span>
+      <div class="checks">${(v.type==="moto"?MOTO_ITEMS:ITEMS).map((x,i)=>`<label class="check"><input type="checkbox" value="${esc(x)}" id="ri${i}">${esc(x)}</label>`).join("")}</div></div>
+    <div class="row2">
+      <div class="field"><label class="label" for="rCost">Tutar (₺)</label><input type="number" inputmode="decimal" id="rCost" placeholder="4500" min="0"></div>
+      <div class="field"><label class="label" for="rShop">Servis</label><input id="rShop" placeholder="Usta / servis adı" maxlength="40"></div>
+    </div>
+    <div class="field"><label class="label" for="rNote">Not</label><textarea id="rNote" placeholder="Örn. 5W-30 yağ kullanıldı, ön balatalar %30"></textarea></div>
+    <div class="field"><span class="label">Fatura / fiş fotoğrafı</span><div class="thumbs" id="rPh"></div></div>
+    <div class="err" id="rErr" role="alert"></div>
+    <div class="sheet-actions"><button class="btn btn-ghost" data-close>Vazgeç</button><button class="btn btn-primary" id="rSave">Kaydet</button></div>`);
+  const drawPh=()=>{$("#rPh").innerHTML=pending.map(p=>`<span class="thumb"><img src="${p}" alt=""></span>`).join("")+(pending.length<4?`<button class="thumb add" id="rPhAdd" aria-label="Fotoğraf ekle">+</button>`:"");
+    const a=$("#rPhAdd");if(a)a.onclick=async()=>{const img=await pickImage({max:1600});if(img){pending.push(img);drawPh()}}};
+  drawPh();
+  $("#rSave").onclick=async()=>{
+    const date=$("#rDate").value,km=$("#rKm").value,items=[...document.querySelectorAll(".checks input:checked")].map(i=>i.value);
+    if(!date||!km){$("#rErr").textContent="Tarih ve kilometre gerekli.";return}
+    if(!items.length&&!$("#rNote").value.trim()){$("#rErr").textContent="Yapılan en az bir işlemi seç ya da not yaz.";return}
+    $("#rSave").disabled=true;
+    const photos=[];for(const p of pending){try{photos.push(await storePhoto(p))}catch(e){}}
+    v.records.push({id:uid(),date,km:Number(km),items,cost:$("#rCost").value?Number($("#rCost").value):"",shop:$("#rShop").value.trim(),note:$("#rNote").value.trim(),photos});
+    if(Number(km)>(Number(v.km)||0)){v.km=Number(km);v.kmDate=date}
+    save();closeSheet();renderDetail();toast("Bakım kaydedildi");
+  };
+}
+
+/* --- Yakıt --- */
+function fuelStats(v){
+  const L=(v.fuelLogs||[]).slice().sort((a,b)=>a.km-b.km||a.date.localeCompare(b.date));
+  const per={};let prev=-1,acc=0,accC=0,totL=0,totC=0,span=0;
+  L.forEach((f,i)=>{
+    if(prev>=0){acc+=Number(f.liters)||0;accC+=Number(f.cost)||0}
+    if(f.full){if(prev>=0){const dk=f.km-L[prev].km;if(dk>0){per[f.id]=acc/dk*100;totL+=acc;totC+=accC;span+=dk}}prev=i;acc=0;accC=0}
+  });
+  const lastF=[...L].reverse().find(f=>per[f.id]!=null),ym=today().slice(0,7);
+  return {L,per,avg:span>0?totL/span*100:null,perKm:span>0?totC/span:null,last:lastF?per[lastF.id]:null,
+    month:L.filter(f=>f.date.startsWith(ym)).reduce((s,f)=>s+(Number(f.cost)||0),0),
+    totalL:L.reduce((s,f)=>s+(Number(f.liters)||0),0)};
+}
+function tabYakit(v){
+  const s=fuelStats(v),list=s.L.slice().reverse(),el=v.fuel==="Elektrik",u=el?"kWh":"L";
+  $("#dBody").innerHTML=`<div class="section first"><div class="section-h"><h3>Yakıt takibi</h3></div>
+    <div class="stats">
+      <div class="stat"><span class="label">Ortalama tüketim</span><b>${s.avg!=null?dec(s.avg):"—"}<small>${u}/100 km</small></b></div>
+      <div class="stat"><span class="label">Son ölçüm</span><b>${s.last!=null?dec(s.last):"—"}<small>${u}/100 km</small></b></div>
+      <div class="stat"><span class="label">Km başı yakıt</span><b>${s.perKm!=null?dec(s.perKm,2):"—"}<small>₺/km</small></b></div>
+      <div class="stat"><span class="label">Bu ay</span><b>${s.month?Math.round(s.month).toLocaleString("tr-TR"):"0"}<small>₺</small></b></div>
+    </div>
+    <div class="hint">Tüketim, iki "depo full" dolum arasında harcanan yakıttan hesaplanır. En doğru sonuç için her seferinde depoyu tam doldurup "Depo full" işaretle.</div></div>
+    <div class="section"><div class="section-h"><h3>Dolumlar</h3>${list.length?`<span class="hint">${list.length} dolum · ${dec(s.totalL,0)} ${u}</span>`:""}</div>
+    <div class="timeline">${list.length?list.map(f=>`
+      <article class="rec"><div class="rh"><span class="date">${fmtDate(f.date)}</span><span class="km num">${fmtKm(f.km)}</span></div>
+        <div class="chips"><span class="chip num">${dec(f.liters,2)} ${u}</span>${f.cost?`<span class="chip num">${fmtTL(f.cost)}</span>`:""}${f.cost&&f.liters?`<span class="chip num">${dec(f.cost/f.liters,2)} ₺/${u}</span>`:""}${f.full?`<span class="chip">Depo full</span>`:`<span class="chip">Kısmi</span>`}</div>
+        <div class="foot"><span>${esc(f.station||"")}${s.per[f.id]!=null?`${f.station?" · ":""}<b style="color:var(--fg)">${dec(s.per[f.id])} ${u}/100 km</b>`:""}</span><button class="del" data-fid="${f.id}">Sil</button></div>
+      </article>`).join(""):`<div class="empty">Henüz dolum yok. <b>Yakıt ekle</b> ile ilk dolumunu gir.</div>`}</div></div>`;
+  document.querySelectorAll("[data-fid]").forEach(b=>armButton(b,"Silmek için tekrar dokun",()=>{v.fuelLogs=v.fuelLogs.filter(x=>x.id!==b.dataset.fid);save();renderDetail();toast("Dolum silindi")}));
+}
+function fuelSheet(v){
+  const el=v.fuel==="Elektrik",u=el?"kWh":"Litre",last=(v.fuelLogs||[]).slice().sort((a,b)=>b.km-a.km)[0];
+  openSheet(`<h3>${el?"Şarj ekle":"Yakıt ekle"}</h3>
+    <div class="row2">
+      <div class="field"><label class="label" for="fDate">Tarih</label><input type="date" id="fDate" value="${today()}" max="${today()}"></div>
+      <div class="field"><label class="label" for="fKm">Kilometre</label><input type="number" inputmode="numeric" id="fKm" placeholder="${curKmOf(v)||"85000"}"></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label class="label" for="fL">${u}</label><input type="number" inputmode="decimal" step="0.01" id="fL" placeholder="42,5"></div>
+      <div class="field"><label class="label" for="fC">Tutar (₺)</label><input type="number" inputmode="decimal" step="0.01" id="fC" placeholder="1850"></div>
+    </div>
+    <div class="hint" id="fUnit">${last&&last.cost&&last.liters?`Son birim fiyat: ${dec(last.cost/last.liters,2)} ₺`:""}</div>
+    <label class="toggle"><input type="checkbox" id="fFull" checked><span><b>Depo full</b><small>Depoyu tamamen doldurduysan işaretli bırak.</small></span></label>
+    <div class="field"><label class="label" for="fSt">İstasyon</label><input id="fSt" placeholder="Örn. Shell Fethiye" maxlength="40"></div>
+    <div class="err" id="fErr" role="alert"></div>
+    <div class="sheet-actions"><button class="btn btn-ghost" data-close>Vazgeç</button><button class="btn btn-primary" id="fSave">Kaydet</button></div>`);
+  const upd=()=>{const l=Number($("#fL").value),c=Number($("#fC").value);if(l>0&&c>0)$("#fUnit").textContent=`Birim fiyat: ${dec(c/l,2)} ₺/${el?"kWh":"L"}`};
+  $("#fL").oninput=upd;$("#fC").oninput=upd;
+  $("#fSave").onclick=()=>{
+    const km=Number($("#fKm").value),l=Number($("#fL").value);
+    if(!km||!l){$("#fErr").textContent=`Kilometre ve ${u.toLowerCase()} gerekli.`;return}
+    v.fuelLogs=v.fuelLogs||[];
+    v.fuelLogs.push({id:uid(),date:$("#fDate").value||today(),km,liters:l,cost:Number($("#fC").value)||0,full:$("#fFull").checked,station:$("#fSt").value.trim()});
+    if(km>(Number(v.km)||0)){v.km=km;v.kmDate=$("#fDate").value||today()}
+    save();closeSheet();renderDetail();toast("Dolum kaydedildi");
+  };
+}
+
+/* --- Masraf --- */
+let expYear=null;
+function tabMasraf(v){
+  const all=allCosts(v),cy=String(new Date().getFullYear());
+  const years=[...new Set([cy,...all.map(c=>c.date.slice(0,4))])].sort().reverse();
+  if(!expYear||!years.includes(expYear))expYear=cy;
+  const yr=all.filter(c=>c.date.startsWith(expYear)),total=yr.reduce((s,c)=>s+c.amount,0);
+  const months=Array(12).fill(0);yr.forEach(c=>months[Number(c.date.slice(5,7))-1]+=c.amount);
+  const max=Math.max(...months),topI=max>0?months.indexOf(max):-1;
+  const cats={};yr.forEach(c=>cats[c.cat]=(cats[c.cat]||0)+c.amount);
+  const catList=Object.entries(cats).sort((a,b)=>b[1]-a[1]);
+  const exps=(v.expenses||[]).filter(e=>e.date.startsWith(expYear)).sort((a,b)=>b.date.localeCompare(a.date));
+  const km=curKmOf(v);
+  $("#dBody").innerHTML=`<div class="section first">
+    <div class="chipsel" role="group" aria-label="Yıl">${years.map(y=>`<button aria-pressed="${y===expYear}" data-yr="${y}">${y}</button>`).join("")}</div>
+    <div class="total"><span class="label">${expYear} toplam masraf</span><b>${Math.round(total).toLocaleString("tr-TR")} ₺</b></div>
+    <div class="mchart" aria-label="Aylara göre masraf">${months.map((m,i)=>`<div class="mcol"><div class="mtrack"><div class="mbar${i===topI?" top":""}" style="height:${max?Math.max(m>0?3:0,m/max*100):0}%"></div></div><span>${MONTHS[i]}</span></div>`).join("")}</div>
+    ${topI>=0?`<div class="hint">En yüksek ay: ${MONTHS[topI]} · ${Math.round(max).toLocaleString("tr-TR")} ₺${expYear===cy&&total?` · Aylık ortalama ${Math.round(total/(new Date().getMonth()+1)).toLocaleString("tr-TR")} ₺`:""}</div>`:""}
+  </div>
+  <div class="section"><div class="section-h"><h3>Kategoriler</h3></div>
+    ${catList.length?`<div class="cats">${catList.map(([k,a])=>`<div class="cat"><div class="ct"><span>${esc(k)}</span><b>${Math.round(a).toLocaleString("tr-TR")} ₺ <span class="muted" style="font-weight:400">%${Math.round(a/total*100)}</span></b></div><div class="bar"><i style="width:${a/total*100}%"></i></div></div>`).join("")}</div>`:`<div class="empty">${expYear} için masraf yok.</div>`}
+    <div class="hint">Bakım ve yakıt tutarları kendi sekmelerinden otomatik eklenir.</div></div>
+  <div class="section"><div class="section-h"><h3>Diğer masraflar</h3></div>
+    <div class="timeline">${exps.length?exps.map(e=>`<article class="rec"><div class="rh"><span class="date">${esc(e.cat)}</span><b class="num">${fmtTL(e.amount)}</b></div>
+      ${e.note?`<p class="note">${esc(e.note)}</p>`:""}<div class="foot"><span>${fmtDate(e.date)}</span><button class="del" data-eid="${e.id}">Sil</button></div></article>`).join(""):`<div class="empty">Sigorta, kasko, MTV, muayene, otopark gibi masrafları <b>Masraf ekle</b> ile gir.</div>`}</div></div>`;
+  document.querySelectorAll("[data-yr]").forEach(b=>b.onclick=()=>{expYear=b.dataset.yr;renderDetail()});
+  document.querySelectorAll("[data-eid]").forEach(b=>armButton(b,"Silmek için tekrar dokun",()=>{v.expenses=v.expenses.filter(x=>x.id!==b.dataset.eid);save();renderDetail();toast("Masraf silindi")}));
+}
+function expSheet(v){
+  openSheet(`<h3>Masraf ekle</h3>
+    <div class="row2">
+      <div class="field"><label class="label" for="eDate">Tarih</label><input type="date" id="eDate" value="${today()}"></div>
+      <div class="field"><label class="label" for="eAmt">Tutar (₺)</label><input type="number" inputmode="decimal" step="0.01" id="eAmt" placeholder="3500"></div>
+    </div>
+    <div class="field"><label class="label" for="eCat">Kategori</label>${sel("eCat",EXP_CATS,"")}</div>
+    <label class="toggle" id="eDateWrap" hidden><input type="checkbox" id="eSetDate" checked><span><b id="eDateTitle">Sonraki tarihi ayarla</b><small id="eDateSub"></small></span></label>
+    <div class="field"><label class="label" for="eNote">Not</label><input id="eNote" placeholder="Örn. Anadolu Sigorta, poliçe no" maxlength="60"></div>
+    <div class="err" id="eErr" role="alert"></div>
+    <div class="sheet-actions"><button class="btn btn-ghost" data-close>Vazgeç</button><button class="btn btn-primary" id="eSave">Kaydet</button></div>`);
+  const upd=()=>{const m=EXP_DATE[$("#eCat").value];$("#eDateWrap").hidden=!m;if(m){const nd=addMonths($("#eDate").value||today(),m[1]);
+    $("#eDateTitle").textContent=`${DATE_LABELS[m[0]]} tarihini ${fmtDate(nd)} olarak ayarla`;$("#eDateSub").textContent="Önemli tarihlere eklenir ve hatırlatma kurulur."}};
+  $("#eCat").onchange=upd;$("#eDate").onchange=upd;
+  $("#eSave").onclick=()=>{
+    const amt=Number($("#eAmt").value),cat=$("#eCat").value,date=$("#eDate").value||today();
+    if(!amt||!cat){$("#eErr").textContent="Tutar ve kategori gerekli.";return}
+    v.expenses=v.expenses||[];v.expenses.push({id:uid(),date,cat,amount:amt,note:$("#eNote").value.trim()});
+    const m=EXP_DATE[cat];if(m&&$("#eSetDate").checked){v.dates=v.dates||{};v.dates[m[0]]=addMonths(date,m[1])}
+    expYear=date.slice(0,4);save();closeSheet();renderDetail();toast("Masraf kaydedildi");
+  };
+}
+
+/* --- Belgeler --- */
+function tabBelge(v){
+  const docs=(v.docs||[]).slice().sort((a,b)=>(b.added||"").localeCompare(a.added||""));
+  $("#dBody").innerHTML=`<div class="section first"><div class="section-h"><h3>Belge cüzdanı</h3></div>
+    ${docs.length?`<div class="docgrid">${docs.map(d=>{const n=d.expiry?daysTo(d.expiry):null,c=n==null?"":n<0?"bad":n<=30?"warn":"ok";
+      return `<button class="doc" data-doc="${d.id}"><div class="dp">${d.photos&&d.photos[0]?`<img src="${photoSrc(d.photos[0])}" alt="">`:""}</div>
+        <div class="dm"><b>${esc(d.title||d.type)}</b>${d.title?`<span class="hint">${esc(d.type)}</span>`:""}${d.expiry?`<span class="pill ${c}"><i></i>${n<0?"Süresi doldu":"Bitiş "+shortDate(d.expiry)}</span>`:""}${d.photos&&d.photos.length>1?`<span class="hint">${d.photos.length} sayfa</span>`:""}</div></button>`}).join("")}</div>`
+      :`<div class="empty">Ruhsat, sigorta poliçesi, muayene raporu ve faturaların fotoğraflarını burada sakla. <b>Belge ekle</b> ile başla.</div>`}
+    <div class="hint">Belgeler sadece bu telefonda saklanır ve yedeğe dahildir.</div></div>`;
+  document.querySelectorAll("[data-doc]").forEach(b=>b.onclick=()=>docView(v,b.dataset.doc));
+}
+function docView(v,id){
+  const d=(v.docs||[]).find(x=>x.id===id);if(!d)return;
+  openSheet(`<h3>${esc(d.title||d.type)}</h3>
+    <div class="hint">${esc(d.type)}${d.expiry?" · Bitiş "+fmtDate(d.expiry):""}${d.note?" · "+esc(d.note):""}</div>
+    ${(d.photos||[]).map(p=>`<img class="vimg" src="${photoSrc(p)}" alt="">`).join("")}
+    <div class="sheet-actions"><button class="btn btn-danger" id="dDel">Belgeyi sil</button><button class="btn btn-ghost" data-close>Kapat</button></div>`);
+  armButton($("#dDel"),"Silmek için tekrar dokun",()=>{v.docs=v.docs.filter(x=>x.id!==id);save();(d.photos||[]).forEach(dropPhoto);closeSheet();renderDetail();toast("Belge silindi")});
+}
+function docSheet(v){
+  const pending=[];
+  openSheet(`<h3>Belge ekle</h3>
+    <div class="field"><label class="label" for="dType">Belge türü</label>${sel("dType",DOC_TYPES,"")}</div>
+    <div class="field"><label class="label" for="dTitle">Başlık (isteğe bağlı)</label><input id="dTitle" placeholder="Örn. 2026 trafik sigortası" maxlength="40"></div>
+    <div class="field"><label class="label" for="dExp">Bitiş tarihi (varsa)</label><input type="date" id="dExp"></div>
+    <div class="field"><span class="label">Fotoğraflar</span><div class="thumbs" id="dPh"></div></div>
+    <div class="field"><label class="label" for="dNote">Not</label><input id="dNote" placeholder="Örn. poliçe numarası" maxlength="60"></div>
+    <div class="err" id="dErr" role="alert"></div>
+    <div class="sheet-actions"><button class="btn btn-ghost" data-close>Vazgeç</button><button class="btn btn-primary" id="dSave">Kaydet</button></div>`);
+  const draw=()=>{$("#dPh").innerHTML=pending.map(p=>`<span class="thumb"><img src="${p}" alt=""></span>`).join("")+(pending.length<6?`<button class="thumb add" id="dPhAdd" aria-label="Fotoğraf ekle">+</button>`:"");
+    const a=$("#dPhAdd");if(a)a.onclick=async()=>{const img=await pickImage({max:1800,q:.85});if(img){pending.push(img);draw()}}};
+  draw();
+  $("#dSave").onclick=async()=>{
+    const type=$("#dType").value;
+    if(!type){$("#dErr").textContent="Belge türünü seç.";return}
+    if(!pending.length){$("#dErr").textContent="En az bir fotoğraf ekle.";return}
+    $("#dSave").disabled=true;
+    const photos=[];for(const p of pending){try{photos.push(await storePhoto(p))}catch(e){}}
+    const expiry=$("#dExp").value;
+    v.docs=v.docs||[];v.docs.push({id:uid(),type,title:$("#dTitle").value.trim(),expiry,note:$("#dNote").value.trim(),photos,added:new Date().toISOString()});
+    if(expiry&&DOC_DATE[type]){v.dates=v.dates||{};v.dates[DOC_DATE[type]]=expiry}
+    save();closeSheet();renderDetail();toast("Belge kaydedildi");
+  };
+}
+
+/* ===== Service book PDF ===== */
+function buildPdf(imgs,w,h){
+  const enc=new TextEncoder(),parts=[],offs=[];let len=0;
+  const push=d=>{const b=typeof d==="string"?enc.encode(d):d;parts.push(b);len+=b.length};
+  const obj=(id,body)=>{offs[id]=len;push(`${id} 0 obj\n`);body();push("\nendobj\n")};
+  const PW=595.28,PH=841.89,n=imgs.length;
+  push(new Uint8Array([0x25,0x50,0x44,0x46,0x2d,0x31,0x2e,0x34,0x0a,0x25,0xe2,0xe3,0xcf,0xd3,0x0a]));
+  obj(1,()=>push("<< /Type /Catalog /Pages 2 0 R >>"));
+  obj(2,()=>push(`<< /Type /Pages /Kids [${imgs.map((_,i)=>`${3+3*i} 0 R`).join(" ")}] /Count ${n} >>`));
+  imgs.forEach((im,i)=>{const p=3+3*i,cs=`q ${PW} 0 0 ${PH} 0 0 cm /Im${i} Do Q`;
+    obj(p,()=>push(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /XObject << /Im${i} ${p+2} 0 R >> >> /Contents ${p+1} 0 R >>`));
+    obj(p+1,()=>push(`<< /Length ${cs.length} >>\nstream\n${cs}\nendstream`));
+    obj(p+2,()=>{push(`<< /Type /XObject /Subtype /Image /Width ${w} /Height ${h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${im.length} >>\nstream\n`);push(im);push("\nendstream")});
+  });
+  const total=3+3*n,xref=len;
+  let x=`xref\n0 ${total}\n0000000000 65535 f \n`;for(let k=1;k<total;k++)x+=String(offs[k]).padStart(10,"0")+" 00000 n \n";
+  push(x);push(`trailer\n<< /Size ${total} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`);
+  const out=new Uint8Array(len);let o=0;parts.forEach(b=>{out.set(b,o);o+=b.length});return out;
+}
+async function servicePdf(v){
+  const done=showBusy("Servis defteri hazırlanıyor…");
+  try{
+    try{await document.fonts.ready}catch(e){}
+    const W=1240,H=1754,M=88,FOOT=70,pages=[];let c,x,y;
+    const F=(wt,s)=>`${wt} ${s}px Barlow, "Helvetica Neue", Arial, sans-serif`;
+    const INK="#14181D",MUT="#5D6672",LINE="#D6DBE1",ACC="#E08408";
+    const wrap=(t,maxW)=>{const out=[];String(t||"").split("\n").forEach(par=>{let line="";par.split(/\s+/).forEach(w=>{const tr=line?line+" "+w:w;if(x.measureText(tr).width>maxW&&line){out.push(line);line=w}else line=tr});out.push(line)});return out.filter((l,i,a)=>l||a.length===1)};
+    const page=()=>{c=document.createElement("canvas");c.width=W;c.height=H;x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,W,H);x.fillStyle=ACC;x.fillRect(0,0,W,12);pages.push(c);y=M};
+    const text=(t,px,py,font,color,align)=>{x.font=font;x.fillStyle=color||INK;x.textAlign=align||"left";x.textBaseline="alphabetic";x.fillText(t,px,py)};
+    const cols=[M,M+180,M+330,M+800,W-M];
+    const tableHead=()=>{x.fillStyle="#F2F4F6";x.fillRect(M-10,y,W-2*M+20,46);
+      ["TARİH","KM","YAPILAN İŞLEMLER","SERVİS"].forEach((h,i)=>text(h,cols[i],y+30,F(600,19),MUT));text("TUTAR",cols[4],y+30,F(600,19),MUT,"right");y+=62};
+    page();
+    text("SERVİS DEFTERİ",M,y+44,F(700,56));
+    text("Bakım Defterim",M,y+80,F(500,24),MUT);
+    text("Oluşturulma: "+fmtDate(today()),W-M,y+104,F(500,22),MUT,"right");
+    // plate
+    const pw=360,ph=74,px=W-M-pw,py=y-6;x.fillStyle="#fff";x.strokeStyle="#111";x.lineWidth=4;x.fillRect(px,py,pw,ph);x.strokeRect(px,py,pw,ph);
+    x.fillStyle="#1C47A8";x.fillRect(px+2,py+2,46,ph-4);text("TR",px+25,py+ph-12,F(700,18),"#fff","center");text(v.plate||"",px+48+(pw-48)/2,py+54,F(700,44),"#111","center");
+    y+=118;x.fillStyle=LINE;x.fillRect(M,y,W-2*M,2);y+=40;
+    const km=curKmOf(v),info=[["Araç",`${v.brand} ${v.model}`],["Model yılı",String(v.year)],["Araç sahibi",S.owner?.name||"—"],["Güncel km",km?fmtKm(km):"—"],
+      ["Motor",v.engine||"—"],["Yakıt",v.fuel||"—"],[v.type==="moto"?"Şanzıman":"Vites",v.gear||"—"],["Motor yağı",v.oil||"—"]];
+    info.forEach((r,i)=>{const cx=i%2?W/2+10:M,cy=y+Math.floor(i/2)*70;text(r[0].toLocaleUpperCase("tr-TR"),cx,cy,F(600,18),MUT);x.font=F(600,28);let t=r[1];while(x.measureText(t).width>W/2-M-20&&t.length>3)t=t.slice(0,-2)+"…";text(t,cx,cy+34,F(600,28))});
+    y+=Math.ceil(info.length/2)*70+10;
+    const recs=(v.records||[]).slice().sort((a,b)=>a.date.localeCompare(b.date)||a.km-b.km);
+    const cost=recs.reduce((s,r)=>s+(Number(r.cost)||0),0);
+    x.fillStyle="#FFF6EA";x.fillRect(M-10,y,W-2*M+20,80);
+    text(`${recs.length} bakım kaydı`,M+10,y+50,F(700,30));text(cost?"Toplam bakım masrafı: "+fmtTL(Math.round(cost)):"",W-M-10,y+50,F(600,26),INK,"right");
+    y+=112;
+    text("Bakım geçmişi",M,y,F(700,34));y+=24;
+    tableHead();
+    recs.forEach((r,ri)=>{
+      x.font=F(500,22);const items=wrap((r.items||[]).join(", ")||"—",cols[3]-cols[2]-24);
+      x.font=F(400,20);const note=r.note?wrap(r.note,cols[3]-cols[2]-24):[];
+      x.font=F(500,22);const shop=wrap(r.shop||"—",cols[4]-cols[3]-150);
+      const rh=Math.max(items.length*30+note.length*27,shop.length*30)+30;
+      if(y+rh>H-M-FOOT){page();tableHead()}
+      if(ri%2){x.fillStyle="#FAFBFC";x.fillRect(M-10,y-6,W-2*M+20,rh)}
+      text(shortDate(r.date),cols[0],y+24,F(600,22));text(fmtKm(r.km),cols[1],y+24,F(500,22));
+      items.forEach((l,i)=>text(l,cols[2],y+24+i*30,F(500,22)));
+      note.forEach((l,i)=>text(l,cols[2],y+24+items.length*30+i*27,F(400,20),MUT));
+      shop.forEach((l,i)=>text(l,cols[3],y+24+i*30,F(500,22)));
+      text(r.cost?fmtTL(r.cost):"—",cols[4],y+24,F(600,22),INK,"right");
+      y+=rh;x.fillStyle=LINE;x.fillRect(M-10,y-6,W-2*M+20,1);
+    });
+    if(!recs.length)text("Henüz bakım kaydı yok.",M,y+30,F(500,24),MUT);
+    pages.forEach((pg,i)=>{x=pg.getContext("2d");x.fillStyle=LINE;x.fillRect(M,H-M+6,W-2*M,1);
+      text(`${v.plate} · ${v.brand} ${v.model} · Bakım Defterim ile oluşturuldu`,M,H-M+44,F(500,19),MUT);text(`Sayfa ${i+1} / ${pages.length}`,W-M,H-M+44,F(500,19),MUT,"right")});
+    const jpgs=pages.map(pg=>{const b=atob(pg.toDataURL("image/jpeg",.88).split(",")[1]),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u});
+    const pdf=buildPdf(jpgs,W,H);done();
+    await shareFile(`Servis-Defteri-${(v.plate||"arac").replace(/\s+/g,"")}.pdf`,u8b64(pdf),"application/pdf","Servis defteri");
+  }catch(e){done();toast("PDF oluşturulamadı. Tekrar dene.")}
+}
+
 /* --- Auto technical data from the internet (CarQuery open vehicle database) --- */
 const SPEC_FIELDS=[
   ["motor_hacmi_cc","Motor hacmi",x=>x+" cc"],["guc_hp","Güç",x=>x+" PS"],["tork_nm","Tork",x=>x+" Nm"],
@@ -747,21 +1448,6 @@ function armButton(btn,armedText,action){
 }
 $("#back").onclick=goHome;
 
-/* Photo */
-$("#photoIn").addEventListener("change",e=>{
-  const f=e.target.files[0];e.target.value="";if(!f)return;
-  const rd=new FileReader();
-  rd.onload=()=>{const img=new Image();img.onload=()=>{
-    const max=960,sc=Math.min(1,max/Math.max(img.width,img.height));
-    const c=document.createElement("canvas");c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);
-    c.getContext("2d").drawImage(img,0,0,c.width,c.height);
-    const v=cur(),old=v.photo;v.photo=c.toDataURL("image/jpeg",.78);
-    if(!save()){v.photo=old;return}
-    renderDetail();toast("Fotoğraf kaydedildi");
-  };img.onerror=()=>toast("Bu dosya açılamadı. JPG veya PNG bir fotoğraf seç.");img.src=rd.result};
-  rd.readAsDataURL(f);
-});
-
 /* Sheets */
 function openSheet(html){
   $("#sheetBody").innerHTML=html;
@@ -774,32 +1460,6 @@ function closeSheet(){
   setTimeout(()=>{bg.hidden=true;sh.hidden=true},250);
 }
 $("#sheetBg").onclick=closeSheet;
-
-$("#addRec").onclick=()=>{
-  const v=cur(),st=status(v);
-  openSheet(`<h3>Bakım ekle</h3>
-    <div class="row2">
-      <div class="field"><label class="label" for="rDate">Tarih</label><input type="date" id="rDate" value="${today()}" max="${today()}"></div>
-      <div class="field"><label class="label" for="rKm">Kilometre</label><input type="number" inputmode="numeric" id="rKm" placeholder="${st.curKm||"85000"}" min="0"></div>
-    </div>
-    <div class="field"><span class="label">Neler yapıldı?</span>
-      <div class="checks">${(v.type==="moto"?MOTO_ITEMS:ITEMS).map((x,i)=>`<label class="check"><input type="checkbox" value="${esc(x)}" id="ri${i}">${esc(x)}</label>`).join("")}</div></div>
-    <div class="row2">
-      <div class="field"><label class="label" for="rCost">Tutar (₺)</label><input type="number" inputmode="decimal" id="rCost" placeholder="4500" min="0"></div>
-      <div class="field"><label class="label" for="rShop">Servis</label><input id="rShop" placeholder="Usta / servis adı" maxlength="40"></div>
-    </div>
-    <div class="field"><label class="label" for="rNote">Not</label><textarea id="rNote" placeholder="Örn. 5W-30 yağ kullanıldı, ön balatalar %30"></textarea></div>
-    <div class="err" id="rErr" role="alert"></div>
-    <div class="sheet-actions"><button class="btn btn-ghost" data-close>Vazgeç</button><button class="btn btn-primary" id="rSave">Kaydet</button></div>`);
-  $("#rSave").onclick=()=>{
-    const date=$("#rDate").value,km=$("#rKm").value,items=[...document.querySelectorAll(".checks input:checked")].map(i=>i.value);
-    if(!date||!km){$("#rErr").textContent="Tarih ve kilometre gerekli.";return}
-    if(!items.length&&!$("#rNote").value.trim()){$("#rErr").textContent="Yapılan en az bir işlemi seç ya da not yaz.";return}
-    v.records.push({id:uid(),date,km:Number(km),items,cost:$("#rCost").value?Number($("#rCost").value):"",shop:$("#rShop").value.trim(),note:$("#rNote").value.trim()});
-    if(Number(km)>(Number(v.km)||0))v.km=Number(km);
-    save();closeSheet();renderDetail();toast("Bakım kaydedildi");
-  };
-};
 
 function techSheet(){
   const moto=cur().type==="moto";
@@ -854,10 +1514,16 @@ function techSheet(){
 }
 
 /* Boot */
-fillSelects();load();
-if(S.owner&&S.vehicles.length){renderHome();show("home")}
-else if(S.owner){openOnb(true);$("#cancelAdd").hidden=true}
-else openOnb(false);
+$("#plateOcr").onclick=async()=>{const r=await ocrPlate();if(r){const i=$("#fPlate");i.value=normPlate(r);i.dispatchEvent(new Event("input"));toast("Plaka okundu, kontrol et")}};
+(async()=>{
+  fillSelects();
+  await initFiles();
+  await loadState();
+  if(S.owner&&S.vehicles.length){renderHome();show("home")}
+  else if(S.owner){openOnb(true);$("#cancelAdd").hidden=true}
+  else openOnb(false);
+  if(S.vehicles.length)scheduleAll();
+})();
 })();
 </script>
 
