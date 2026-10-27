@@ -1,0 +1,11 @@
+{
+  "appId": "com.webdesigner299.bakimdefterim",
+  "appName": "Bakım Defterim",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false
+  },
+  "ios": {
+    "contentInset": "never"
+  }
+}

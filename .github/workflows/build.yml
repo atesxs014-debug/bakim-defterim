@@ -1,0 +1,91 @@
+name: APK ve IPA derle
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  android:
+    name: Android APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: android-actions/setup-android@v3
+      - name: Bağımlılıkları kur
+        run: npm install
+      - name: Android projesini oluştur
+        run: |
+          npx cap add android
+          npx cap sync android
+      - name: APK derle
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+      - name: APK'yı adlandır
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk BakimDefterim.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: BakimDefterim.apk
+
+  ios:
+    name: iOS IPA (imzasız)
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Bağımlılıkları kur
+        run: npm install
+      - name: iOS projesini oluştur
+        run: |
+          npx cap add ios
+          npx cap sync ios
+      - name: Derle (imzasız)
+        run: |
+          if [ -d ios/App/App.xcworkspace ]; then TARGET="-workspace ios/App/App.xcworkspace"; else TARGET="-project ios/App/App.xcodeproj"; fi
+          xcodebuild $TARGET -scheme App -configuration Release -sdk iphoneos \
+            -destination 'generic/platform=iOS' -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" build
+      - name: IPA paketle
+        run: |
+          mkdir -p Payload
+          cp -R build/Build/Products/Release-iphoneos/App.app Payload/
+          zip -qry BakimDefterim.ipa Payload
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-ipa
+          path: BakimDefterim.ipa
+
+  release:
+    name: İndirme sayfasını yayınla
+    needs: [android, ios]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: Bakım Defterim v1.0.${{ github.run_number }}
+          make_latest: true
+          body: |
+            **Android:** BakimDefterim.apk dosyasını telefona indirip aç ve kur.
+            **iPhone:** BakimDefterim.ipa dosyasını bilgisayara indir, Sideloadly ile kendi Apple ID'nle telefona yükle.
+          files: |
+            BakimDefterim.apk
+            BakimDefterim.ipa
