@@ -36,7 +36,7 @@ Kalıcı indirme linki: `https://github.com/KULLANICI_ADIN/bakim-defterim/releas
 ## Veriler
 
 - Araçlar, bakım kayıtları ve fotoğraflar sadece telefonda saklanır. Uygulamayı silersen veriler de silinir.
-- Fabrika verileri (motor seçenekleri, güç, tork, yağ, triger, lastik, bakım aralığı) Gemini ile Google'da aranarak getirilir. Ücretsiz anahtarı https://aistudio.google.com/apikey adresinden alıp uygulamada Ayarlar'a bir kez yapıştır.
+- Fabrika verileri (motor seçenekleri, güç, tork, yağ, triger, lastik, bakım aralığı) uygulamanın içinde gömülüdür (www/specs-data.js); internet veya anahtar gerekmez. Türkiye'de yaygın 142 otomobil ve 40 motosiklet modelini kapsar; yeni model eklemek için bu dosyaya satır eklenir.
 
 ## Özellikler (v1.1)
 
